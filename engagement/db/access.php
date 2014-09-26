@@ -14,18 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version info
- *
- * This File contains information about the current version of report/logs
- *
- * @package    report_log
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+// Reference page for syntax https://docs.moodle.org/dev/NEWMODULE_Adding_capabilities
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014092602;    // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2013110500;    // Requires this Moodle version
-$plugin->component = 'report_engagement';  // Full name of the plugin (used for diagnostics)
+$capabilities = array(
+
+    'report/engagement:view' => array(
+        'riskbitmask' => RISK_PERSONAL,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        
+    )
+);
