@@ -24,11 +24,4 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['log:view'] = 'View course logs';
-$string['log:viewtoday'] = 'View today\'s logs';
-$string['page'] = 'Page {$a}';
-$string['logsformat'] = 'Logs format';
-$string['page-report-log-x'] = 'Any log report';
-$string['page-report-log-index'] = 'Course log report';
-$string['page-report-log-user'] = 'User course log report';
-$string['pluginname'] = 'Logs';
+$string['pluginname'] = 'Engagement';

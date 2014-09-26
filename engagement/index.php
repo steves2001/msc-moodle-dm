@@ -10,3 +10,13 @@
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 
+require_once('../../config.php');
+require_once($CFG->libdir.'/adminlib.php');
+
+// Display the report
+echo $OUTPUT->header();
+echo $OUTPUT->heading("Hello World");
+echo $OUTPUT->box_start();
+
+echo $OUTPUT->box_end();
+echo $OUTPUT->footer();
