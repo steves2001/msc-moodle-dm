@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info
+ * Report settings
  *
- * This File contains information about the current version of report/logs
- *
- * @package    report_log
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @package    report
+ * @subpackage engagement
+ * @copyright  2014 Stephen Smith
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2014100300;    // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2013110500;    // Requires this Moodle version
-$plugin->component = 'report_engagement';  // Full name of the plugin (used for diagnostics)
+$ADMIN->add('reports', new admin_externalpage('reportengagement', get_string('engagement', 'report_engagement'), "$CFG->wwwroot/report/engagement/index.php"));
+
+// no report settings
+$settings = null;

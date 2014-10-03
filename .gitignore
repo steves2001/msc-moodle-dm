@@ -6,3 +6,4 @@ config.php
 temp/index.php
 temp/report_backups.php
 temp/settings.php
+temp/tempindex.php
