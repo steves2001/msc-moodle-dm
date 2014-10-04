@@ -15,13 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings.
+ * Strings
  *
- * Language strings to be used by report/logs
- *
- * @package    report_log
+ * @package    report
+ * @subpackage engagement
  * @copyright  1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Engagement';
+$string['engagement:view'] = 'View engagement report';
+$string['page-report-engagement-x'] = 'Any engagement report';
+$string['page-report-engagement-index'] = 'Course engagement report';
+$string['page-report-engagement-user'] = 'User course engagement report';
+$string['pluginname'] = 'Engagement report';

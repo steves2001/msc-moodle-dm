@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Report settings
+ * This file contains functions used by the engagement reports
  *
  * @package    report
  * @subpackage engagement
- * @copyright  2014 Stephen Smith
+ * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$ADMIN->add('reports', new admin_externalpage('reportengagement', get_string('engagement', 'report_engagement'), "$CFG->wwwroot/report/engagement/index.php"));
+require_once(dirname(__FILE__).'/lib.php');
 
-// no report settings
-$settings = null;
+
+

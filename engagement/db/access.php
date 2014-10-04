@@ -14,7 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-// Reference page for syntax https://docs.moodle.org/dev/NEWMODULE_Adding_capabilities
+/**
+ * Capabilities
+ *
+ * @package    report_engagement
+ * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -30,6 +36,8 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         ),
 
-        
+        'clonepermissionsfrom' => 'coursereport/outline:view',
     )
 );
+
+
