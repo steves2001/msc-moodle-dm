@@ -1,0 +1,937 @@
+course_modinfo Object
+(
+    [course:course_modinfo:private] => stdClass Object
+        (
+            [id] => 4
+            [category] => 1
+            [sortorder] => 10001
+            [fullname] => Sample Monitored Course
+            [shortname] => SMC
+            [idnumber] => SMC
+            [summary] => <p>Course summary text</p>
+            [summaryformat] => 1
+            [format] => weeks
+            [showgrades] => 1
+            [newsitems] => 5
+            [startdate] => 1412982000
+            [marker] => 0
+            [maxbytes] => 0
+            [legacyfiles] => 0
+            [showreports] => 0
+            [visible] => 1
+            [visibleold] => 1
+            [groupmode] => 0
+            [groupmodeforce] => 0
+            [defaultgroupingid] => 0
+            [lang] => 
+            [calendartype] => 
+            [theme] => 
+            [timecreated] => 1412948085
+            [timemodified] => 1412948085
+            [requested] => 0
+            [enablecompletion] => 0
+            [completionnotify] => 0
+            [cacherev] => 1412948428
+            [numsections] => 3
+            [hiddensections] => 0
+            [coursedisplay] => 0
+        )
+
+    [sectioninfo:course_modinfo:private] => Array
+        (
+            [0] => section_info Object
+                (
+                    [_id:section_info:private] => 41
+                    [_section:section_info:private] => 0
+                    [_name:section_info:private] => 
+                    [_visible:section_info:private] => 1
+                    [_summary:section_info:private] => 
+                    [_summaryformat:section_info:private] => 1
+                    [_showavailability:section_info:private] => 0
+                    [_availablefrom:section_info:private] => 0
+                    [_availableuntil:section_info:private] => 0
+                    [_groupingid:section_info:private] => 0
+                    [_conditionscompletion:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsgrade:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsfield:section_info:private] => Array
+                        (
+                        )
+
+                    [_available:section_info:private] => 
+                    [_availableinfo:section_info:private] => 
+                    [_uservisible:section_info:private] => 
+                    [cachedformatoptions:section_info:private] => Array
+                        (
+                        )
+
+                    [modinfo:section_info:private] => course_modinfo Object
+ *RECURSION*
+                )
+
+            [1] => section_info Object
+                (
+                    [_id:section_info:private] => 42
+                    [_section:section_info:private] => 1
+                    [_name:section_info:private] => 
+                    [_visible:section_info:private] => 1
+                    [_summary:section_info:private] => 
+                    [_summaryformat:section_info:private] => 1
+                    [_showavailability:section_info:private] => 0
+                    [_availablefrom:section_info:private] => 0
+                    [_availableuntil:section_info:private] => 0
+                    [_groupingid:section_info:private] => 0
+                    [_conditionscompletion:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsgrade:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsfield:section_info:private] => Array
+                        (
+                        )
+
+                    [_available:section_info:private] => 
+                    [_availableinfo:section_info:private] => 
+                    [_uservisible:section_info:private] => 
+                    [cachedformatoptions:section_info:private] => Array
+                        (
+                        )
+
+                    [modinfo:section_info:private] => course_modinfo Object
+ *RECURSION*
+                )
+
+            [2] => section_info Object
+                (
+                    [_id:section_info:private] => 43
+                    [_section:section_info:private] => 2
+                    [_name:section_info:private] => 
+                    [_visible:section_info:private] => 1
+                    [_summary:section_info:private] => 
+                    [_summaryformat:section_info:private] => 1
+                    [_showavailability:section_info:private] => 0
+                    [_availablefrom:section_info:private] => 0
+                    [_availableuntil:section_info:private] => 0
+                    [_groupingid:section_info:private] => 0
+                    [_conditionscompletion:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsgrade:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsfield:section_info:private] => Array
+                        (
+                        )
+
+                    [_available:section_info:private] => 
+                    [_availableinfo:section_info:private] => 
+                    [_uservisible:section_info:private] => 
+                    [cachedformatoptions:section_info:private] => Array
+                        (
+                        )
+
+                    [modinfo:section_info:private] => course_modinfo Object
+ *RECURSION*
+                )
+
+            [3] => section_info Object
+                (
+                    [_id:section_info:private] => 44
+                    [_section:section_info:private] => 3
+                    [_name:section_info:private] => 
+                    [_visible:section_info:private] => 1
+                    [_summary:section_info:private] => 
+                    [_summaryformat:section_info:private] => 1
+                    [_showavailability:section_info:private] => 0
+                    [_availablefrom:section_info:private] => 0
+                    [_availableuntil:section_info:private] => 0
+                    [_groupingid:section_info:private] => 0
+                    [_conditionscompletion:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsgrade:section_info:private] => Array
+                        (
+                        )
+
+                    [_conditionsfield:section_info:private] => Array
+                        (
+                        )
+
+                    [_available:section_info:private] => 
+                    [_availableinfo:section_info:private] => 
+                    [_uservisible:section_info:private] => 
+                    [cachedformatoptions:section_info:private] => Array
+                        (
+                        )
+
+                    [modinfo:section_info:private] => course_modinfo Object
+ *RECURSION*
+                )
+
+        )
+
+    [userid:course_modinfo:private] => 2
+    [sections:course_modinfo:private] => Array
+        (
+            [0] => Array
+                (
+                    [0] => 110
+                )
+
+            [1] => Array
+                (
+                    [0] => 111
+                )
+
+            [2] => Array
+                (
+                    [0] => 112
+                )
+
+            [3] => Array
+                (
+                    [0] => 113
+                    [1] => 114
+                )
+
+        )
+
+    [cms:course_modinfo:private] => Array
+        (
+            [110] => cm_info Object
+                (
+                    [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                    [state:cm_info:private] => 2
+                    [id:cm_info:private] => 110
+                    [instance:cm_info:private] => 2
+                    [idnumber:cm_info:private] => 
+                    [added:cm_info:private] => 1412948106
+                    [score:cm_info:private] => 0
+                    [visible:cm_info:private] => 1
+                    [visibleold:cm_info:private] => 1
+                    [groupmode:cm_info:private] => 0
+                    [groupingid:cm_info:private] => 0
+                    [groupmembersonly:cm_info:private] => 0
+                    [indent:cm_info:private] => 0
+                    [completion:cm_info:private] => 0
+                    [completiongradeitemnumber:cm_info:private] => 
+                    [completionview:cm_info:private] => 0
+                    [completionexpected:cm_info:private] => 0
+                    [availablefrom:cm_info:private] => 0
+                    [availableuntil:cm_info:private] => 0
+                    [showavailability:cm_info:private] => 0
+                    [showdescription:cm_info:private] => 0
+                    [extra:cm_info:private] => 
+                    [icon:cm_info:private] => 
+                    [iconcomponent:cm_info:private] => 
+                    [modname:cm_info:private] => forum
+                    [module:cm_info:private] => 9
+                    [name:cm_info:private] => News forum
+                    [sectionnum:cm_info:private] => 0
+                    [section:cm_info:private] => 41
+                    [conditionscompletion:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsgrade:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsfield:cm_info:private] => Array
+                        (
+                        )
+
+                    [available:cm_info:private] => 1
+                    [availableinfo:cm_info:private] => 
+                    [uservisible:cm_info:private] => 1
+                    [url:cm_info:private] => moodle_url Object
+                        (
+                            [scheme:protected] => http
+                            [host:protected] => computing-moodle.co.uk
+                            [port:protected] => 
+                            [user:protected] => 
+                            [pass:protected] => 
+                            [path:protected] => /mod/forum/view.php
+                            [slashargument:protected] => 
+                            [anchor:protected] => 
+                            [params:protected] => Array
+                                (
+                                    [id] => 110
+                                )
+
+                        )
+
+                    [content:cm_info:private] => 
+                    [extraclasses:cm_info:private] => 
+                    [iconurl:cm_info:private] => 
+                    [onclick:cm_info:private] => 
+                    [customdata:cm_info:private] => 
+                    [afterlink:cm_info:private] => 
+                    [afterediticons:cm_info:private] => 
+                )
+
+            [111] => cm_info Object
+                (
+                    [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                    [state:cm_info:private] => 2
+                    [id:cm_info:private] => 111
+                    [instance:cm_info:private] => 8
+                    [idnumber:cm_info:private] => 
+                    [added:cm_info:private] => 1412948186
+                    [score:cm_info:private] => 0
+                    [visible:cm_info:private] => 1
+                    [visibleold:cm_info:private] => 1
+                    [groupmode:cm_info:private] => 0
+                    [groupingid:cm_info:private] => 0
+                    [groupmembersonly:cm_info:private] => 0
+                    [indent:cm_info:private] => 0
+                    [completion:cm_info:private] => 0
+                    [completiongradeitemnumber:cm_info:private] => 
+                    [completionview:cm_info:private] => 0
+                    [completionexpected:cm_info:private] => 0
+                    [availablefrom:cm_info:private] => 0
+                    [availableuntil:cm_info:private] => 0
+                    [showavailability:cm_info:private] => 0
+                    [showdescription:cm_info:private] => 0
+                    [extra:cm_info:private] => 
+                    [icon:cm_info:private] => f/gif-24
+                    [iconcomponent:cm_info:private] => 
+                    [modname:cm_info:private] => resource
+                    [module:cm_info:private] => 17
+                    [name:cm_info:private] => A sample file entry
+                    [sectionnum:cm_info:private] => 1
+                    [section:cm_info:private] => 42
+                    [conditionscompletion:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsgrade:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsfield:cm_info:private] => Array
+                        (
+                        )
+
+                    [available:cm_info:private] => 1
+                    [availableinfo:cm_info:private] => 
+                    [uservisible:cm_info:private] => 1
+                    [url:cm_info:private] => moodle_url Object
+                        (
+                            [scheme:protected] => http
+                            [host:protected] => computing-moodle.co.uk
+                            [port:protected] => 
+                            [user:protected] => 
+                            [pass:protected] => 
+                            [path:protected] => /mod/resource/view.php
+                            [slashargument:protected] => 
+                            [anchor:protected] => 
+                            [params:protected] => Array
+                                (
+                                    [id] => 111
+                                )
+
+                        )
+
+                    [content:cm_info:private] => 
+                    [extraclasses:cm_info:private] => 
+                    [iconurl:cm_info:private] => 
+                    [onclick:cm_info:private] => 
+                    [customdata:cm_info:private] => 
+                    [afterlink:cm_info:private] => 
+                    [afterediticons:cm_info:private] => 
+                )
+
+            [112] => cm_info Object
+                (
+                    [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                    [state:cm_info:private] => 2
+                    [id:cm_info:private] => 112
+                    [instance:cm_info:private] => 4
+                    [idnumber:cm_info:private] => 
+                    [added:cm_info:private] => 1412948232
+                    [score:cm_info:private] => 0
+                    [visible:cm_info:private] => 1
+                    [visibleold:cm_info:private] => 1
+                    [groupmode:cm_info:private] => 0
+                    [groupingid:cm_info:private] => 0
+                    [groupmembersonly:cm_info:private] => 0
+                    [indent:cm_info:private] => 0
+                    [completion:cm_info:private] => 0
+                    [completiongradeitemnumber:cm_info:private] => 
+                    [completionview:cm_info:private] => 0
+                    [completionexpected:cm_info:private] => 0
+                    [availablefrom:cm_info:private] => 0
+                    [availableuntil:cm_info:private] => 0
+                    [showavailability:cm_info:private] => 0
+                    [showdescription:cm_info:private] => 0
+                    [extra:cm_info:private] => 
+                    [icon:cm_info:private] => 
+                    [iconcomponent:cm_info:private] => 
+                    [modname:cm_info:private] => quiz
+                    [module:cm_info:private] => 16
+                    [name:cm_info:private] => A quiz entry
+                    [sectionnum:cm_info:private] => 2
+                    [section:cm_info:private] => 43
+                    [conditionscompletion:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsgrade:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsfield:cm_info:private] => Array
+                        (
+                        )
+
+                    [available:cm_info:private] => 1
+                    [availableinfo:cm_info:private] => 
+                    [uservisible:cm_info:private] => 1
+                    [url:cm_info:private] => moodle_url Object
+                        (
+                            [scheme:protected] => http
+                            [host:protected] => computing-moodle.co.uk
+                            [port:protected] => 
+                            [user:protected] => 
+                            [pass:protected] => 
+                            [path:protected] => /mod/quiz/view.php
+                            [slashargument:protected] => 
+                            [anchor:protected] => 
+                            [params:protected] => Array
+                                (
+                                    [id] => 112
+                                )
+
+                        )
+
+                    [content:cm_info:private] => 
+                    [extraclasses:cm_info:private] => 
+                    [iconurl:cm_info:private] => 
+                    [onclick:cm_info:private] => 
+                    [customdata:cm_info:private] => 
+                    [afterlink:cm_info:private] => 
+                    [afterediticons:cm_info:private] => 
+                )
+
+            [113] => cm_info Object
+                (
+                    [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                    [state:cm_info:private] => 2
+                    [id:cm_info:private] => 113
+                    [instance:cm_info:private] => 72
+                    [idnumber:cm_info:private] => 
+                    [added:cm_info:private] => 1412948373
+                    [score:cm_info:private] => 0
+                    [visible:cm_info:private] => 1
+                    [visibleold:cm_info:private] => 1
+                    [groupmode:cm_info:private] => 0
+                    [groupingid:cm_info:private] => 0
+                    [groupmembersonly:cm_info:private] => 0
+                    [indent:cm_info:private] => 0
+                    [completion:cm_info:private] => 0
+                    [completiongradeitemnumber:cm_info:private] => 
+                    [completionview:cm_info:private] => 0
+                    [completionexpected:cm_info:private] => 0
+                    [availablefrom:cm_info:private] => 0
+                    [availableuntil:cm_info:private] => 0
+                    [showavailability:cm_info:private] => 0
+                    [showdescription:cm_info:private] => 0
+                    [extra:cm_info:private] => 
+                    [icon:cm_info:private] => 
+                    [iconcomponent:cm_info:private] => 
+                    [modname:cm_info:private] => label
+                    [module:cm_info:private] => 12
+                    [name:cm_info:private] => Hello world
+                    [sectionnum:cm_info:private] => 3
+                    [section:cm_info:private] => 44
+                    [conditionscompletion:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsgrade:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsfield:cm_info:private] => Array
+                        (
+                        )
+
+                    [available:cm_info:private] => 1
+                    [availableinfo:cm_info:private] => 
+                    [uservisible:cm_info:private] => 1
+                    [url:cm_info:private] => 
+                    [content:cm_info:private] => <div class="no-overflow"><p>Hello world</p></div>
+                    [extraclasses:cm_info:private] => 
+                    [iconurl:cm_info:private] => 
+                    [onclick:cm_info:private] => 
+                    [customdata:cm_info:private] => 
+                    [afterlink:cm_info:private] => 
+                    [afterediticons:cm_info:private] => 
+                )
+
+            [114] => cm_info Object
+                (
+                    [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                    [state:cm_info:private] => 2
+                    [id:cm_info:private] => 114
+                    [instance:cm_info:private] => 12
+                    [idnumber:cm_info:private] => 
+                    [added:cm_info:private] => 1412948426
+                    [score:cm_info:private] => 0
+                    [visible:cm_info:private] => 1
+                    [visibleold:cm_info:private] => 1
+                    [groupmode:cm_info:private] => 0
+                    [groupingid:cm_info:private] => 0
+                    [groupmembersonly:cm_info:private] => 0
+                    [indent:cm_info:private] => 0
+                    [completion:cm_info:private] => 0
+                    [completiongradeitemnumber:cm_info:private] => 
+                    [completionview:cm_info:private] => 0
+                    [completionexpected:cm_info:private] => 0
+                    [availablefrom:cm_info:private] => 0
+                    [availableuntil:cm_info:private] => 0
+                    [showavailability:cm_info:private] => 0
+                    [showdescription:cm_info:private] => 0
+                    [extra:cm_info:private] => 
+                    [icon:cm_info:private] => 
+                    [iconcomponent:cm_info:private] => 
+                    [modname:cm_info:private] => assign
+                    [module:cm_info:private] => 1
+                    [name:cm_info:private] => You are doomed
+                    [sectionnum:cm_info:private] => 3
+                    [section:cm_info:private] => 44
+                    [conditionscompletion:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsgrade:cm_info:private] => Array
+                        (
+                        )
+
+                    [conditionsfield:cm_info:private] => Array
+                        (
+                        )
+
+                    [available:cm_info:private] => 1
+                    [availableinfo:cm_info:private] => 
+                    [uservisible:cm_info:private] => 1
+                    [url:cm_info:private] => moodle_url Object
+                        (
+                            [scheme:protected] => http
+                            [host:protected] => computing-moodle.co.uk
+                            [port:protected] => 
+                            [user:protected] => 
+                            [pass:protected] => 
+                            [path:protected] => /mod/assign/view.php
+                            [slashargument:protected] => 
+                            [anchor:protected] => 
+                            [params:protected] => Array
+                                (
+                                    [id] => 114
+                                )
+
+                        )
+
+                    [content:cm_info:private] => 
+                    [extraclasses:cm_info:private] => 
+                    [iconurl:cm_info:private] => 
+                    [onclick:cm_info:private] => 
+                    [customdata:cm_info:private] => 
+                    [afterlink:cm_info:private] => 
+                    [afterediticons:cm_info:private] => 
+                )
+
+        )
+
+    [instances:course_modinfo:private] => Array
+        (
+            [forum] => Array
+                (
+                    [2] => cm_info Object
+                        (
+                            [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                            [state:cm_info:private] => 2
+                            [id:cm_info:private] => 110
+                            [instance:cm_info:private] => 2
+                            [idnumber:cm_info:private] => 
+                            [added:cm_info:private] => 1412948106
+                            [score:cm_info:private] => 0
+                            [visible:cm_info:private] => 1
+                            [visibleold:cm_info:private] => 1
+                            [groupmode:cm_info:private] => 0
+                            [groupingid:cm_info:private] => 0
+                            [groupmembersonly:cm_info:private] => 0
+                            [indent:cm_info:private] => 0
+                            [completion:cm_info:private] => 0
+                            [completiongradeitemnumber:cm_info:private] => 
+                            [completionview:cm_info:private] => 0
+                            [completionexpected:cm_info:private] => 0
+                            [availablefrom:cm_info:private] => 0
+                            [availableuntil:cm_info:private] => 0
+                            [showavailability:cm_info:private] => 0
+                            [showdescription:cm_info:private] => 0
+                            [extra:cm_info:private] => 
+                            [icon:cm_info:private] => 
+                            [iconcomponent:cm_info:private] => 
+                            [modname:cm_info:private] => forum
+                            [module:cm_info:private] => 9
+                            [name:cm_info:private] => News forum
+                            [sectionnum:cm_info:private] => 0
+                            [section:cm_info:private] => 41
+                            [conditionscompletion:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsgrade:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsfield:cm_info:private] => Array
+                                (
+                                )
+
+                            [available:cm_info:private] => 1
+                            [availableinfo:cm_info:private] => 
+                            [uservisible:cm_info:private] => 1
+                            [url:cm_info:private] => moodle_url Object
+                                (
+                                    [scheme:protected] => http
+                                    [host:protected] => computing-moodle.co.uk
+                                    [port:protected] => 
+                                    [user:protected] => 
+                                    [pass:protected] => 
+                                    [path:protected] => /mod/forum/view.php
+                                    [slashargument:protected] => 
+                                    [anchor:protected] => 
+                                    [params:protected] => Array
+                                        (
+                                            [id] => 110
+                                        )
+
+                                )
+
+                            [content:cm_info:private] => 
+                            [extraclasses:cm_info:private] => 
+                            [iconurl:cm_info:private] => 
+                            [onclick:cm_info:private] => 
+                            [customdata:cm_info:private] => 
+                            [afterlink:cm_info:private] => 
+                            [afterediticons:cm_info:private] => 
+                        )
+
+                )
+
+            [resource] => Array
+                (
+                    [8] => cm_info Object
+                        (
+                            [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                            [state:cm_info:private] => 2
+                            [id:cm_info:private] => 111
+                            [instance:cm_info:private] => 8
+                            [idnumber:cm_info:private] => 
+                            [added:cm_info:private] => 1412948186
+                            [score:cm_info:private] => 0
+                            [visible:cm_info:private] => 1
+                            [visibleold:cm_info:private] => 1
+                            [groupmode:cm_info:private] => 0
+                            [groupingid:cm_info:private] => 0
+                            [groupmembersonly:cm_info:private] => 0
+                            [indent:cm_info:private] => 0
+                            [completion:cm_info:private] => 0
+                            [completiongradeitemnumber:cm_info:private] => 
+                            [completionview:cm_info:private] => 0
+                            [completionexpected:cm_info:private] => 0
+                            [availablefrom:cm_info:private] => 0
+                            [availableuntil:cm_info:private] => 0
+                            [showavailability:cm_info:private] => 0
+                            [showdescription:cm_info:private] => 0
+                            [extra:cm_info:private] => 
+                            [icon:cm_info:private] => f/gif-24
+                            [iconcomponent:cm_info:private] => 
+                            [modname:cm_info:private] => resource
+                            [module:cm_info:private] => 17
+                            [name:cm_info:private] => A sample file entry
+                            [sectionnum:cm_info:private] => 1
+                            [section:cm_info:private] => 42
+                            [conditionscompletion:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsgrade:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsfield:cm_info:private] => Array
+                                (
+                                )
+
+                            [available:cm_info:private] => 1
+                            [availableinfo:cm_info:private] => 
+                            [uservisible:cm_info:private] => 1
+                            [url:cm_info:private] => moodle_url Object
+                                (
+                                    [scheme:protected] => http
+                                    [host:protected] => computing-moodle.co.uk
+                                    [port:protected] => 
+                                    [user:protected] => 
+                                    [pass:protected] => 
+                                    [path:protected] => /mod/resource/view.php
+                                    [slashargument:protected] => 
+                                    [anchor:protected] => 
+                                    [params:protected] => Array
+                                        (
+                                            [id] => 111
+                                        )
+
+                                )
+
+                            [content:cm_info:private] => 
+                            [extraclasses:cm_info:private] => 
+                            [iconurl:cm_info:private] => 
+                            [onclick:cm_info:private] => 
+                            [customdata:cm_info:private] => 
+                            [afterlink:cm_info:private] => 
+                            [afterediticons:cm_info:private] => 
+                        )
+
+                )
+
+            [quiz] => Array
+                (
+                    [4] => cm_info Object
+                        (
+                            [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                            [state:cm_info:private] => 2
+                            [id:cm_info:private] => 112
+                            [instance:cm_info:private] => 4
+                            [idnumber:cm_info:private] => 
+                            [added:cm_info:private] => 1412948232
+                            [score:cm_info:private] => 0
+                            [visible:cm_info:private] => 1
+                            [visibleold:cm_info:private] => 1
+                            [groupmode:cm_info:private] => 0
+                            [groupingid:cm_info:private] => 0
+                            [groupmembersonly:cm_info:private] => 0
+                            [indent:cm_info:private] => 0
+                            [completion:cm_info:private] => 0
+                            [completiongradeitemnumber:cm_info:private] => 
+                            [completionview:cm_info:private] => 0
+                            [completionexpected:cm_info:private] => 0
+                            [availablefrom:cm_info:private] => 0
+                            [availableuntil:cm_info:private] => 0
+                            [showavailability:cm_info:private] => 0
+                            [showdescription:cm_info:private] => 0
+                            [extra:cm_info:private] => 
+                            [icon:cm_info:private] => 
+                            [iconcomponent:cm_info:private] => 
+                            [modname:cm_info:private] => quiz
+                            [module:cm_info:private] => 16
+                            [name:cm_info:private] => A quiz entry
+                            [sectionnum:cm_info:private] => 2
+                            [section:cm_info:private] => 43
+                            [conditionscompletion:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsgrade:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsfield:cm_info:private] => Array
+                                (
+                                )
+
+                            [available:cm_info:private] => 1
+                            [availableinfo:cm_info:private] => 
+                            [uservisible:cm_info:private] => 1
+                            [url:cm_info:private] => moodle_url Object
+                                (
+                                    [scheme:protected] => http
+                                    [host:protected] => computing-moodle.co.uk
+                                    [port:protected] => 
+                                    [user:protected] => 
+                                    [pass:protected] => 
+                                    [path:protected] => /mod/quiz/view.php
+                                    [slashargument:protected] => 
+                                    [anchor:protected] => 
+                                    [params:protected] => Array
+                                        (
+                                            [id] => 112
+                                        )
+
+                                )
+
+                            [content:cm_info:private] => 
+                            [extraclasses:cm_info:private] => 
+                            [iconurl:cm_info:private] => 
+                            [onclick:cm_info:private] => 
+                            [customdata:cm_info:private] => 
+                            [afterlink:cm_info:private] => 
+                            [afterediticons:cm_info:private] => 
+                        )
+
+                )
+
+            [label] => Array
+                (
+                    [72] => cm_info Object
+                        (
+                            [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                            [state:cm_info:private] => 2
+                            [id:cm_info:private] => 113
+                            [instance:cm_info:private] => 72
+                            [idnumber:cm_info:private] => 
+                            [added:cm_info:private] => 1412948373
+                            [score:cm_info:private] => 0
+                            [visible:cm_info:private] => 1
+                            [visibleold:cm_info:private] => 1
+                            [groupmode:cm_info:private] => 0
+                            [groupingid:cm_info:private] => 0
+                            [groupmembersonly:cm_info:private] => 0
+                            [indent:cm_info:private] => 0
+                            [completion:cm_info:private] => 0
+                            [completiongradeitemnumber:cm_info:private] => 
+                            [completionview:cm_info:private] => 0
+                            [completionexpected:cm_info:private] => 0
+                            [availablefrom:cm_info:private] => 0
+                            [availableuntil:cm_info:private] => 0
+                            [showavailability:cm_info:private] => 0
+                            [showdescription:cm_info:private] => 0
+                            [extra:cm_info:private] => 
+                            [icon:cm_info:private] => 
+                            [iconcomponent:cm_info:private] => 
+                            [modname:cm_info:private] => label
+                            [module:cm_info:private] => 12
+                            [name:cm_info:private] => Hello world
+                            [sectionnum:cm_info:private] => 3
+                            [section:cm_info:private] => 44
+                            [conditionscompletion:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsgrade:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsfield:cm_info:private] => Array
+                                (
+                                )
+
+                            [available:cm_info:private] => 1
+                            [availableinfo:cm_info:private] => 
+                            [uservisible:cm_info:private] => 1
+                            [url:cm_info:private] => 
+                            [content:cm_info:private] => <div class="no-overflow"><p>Hello world</p></div>
+                            [extraclasses:cm_info:private] => 
+                            [iconurl:cm_info:private] => 
+                            [onclick:cm_info:private] => 
+                            [customdata:cm_info:private] => 
+                            [afterlink:cm_info:private] => 
+                            [afterediticons:cm_info:private] => 
+                        )
+
+                )
+
+            [assign] => Array
+                (
+                    [12] => cm_info Object
+                        (
+                            [modinfo:cm_info:private] => course_modinfo Object
+ *RECURSION*
+                            [state:cm_info:private] => 2
+                            [id:cm_info:private] => 114
+                            [instance:cm_info:private] => 12
+                            [idnumber:cm_info:private] => 
+                            [added:cm_info:private] => 1412948426
+                            [score:cm_info:private] => 0
+                            [visible:cm_info:private] => 1
+                            [visibleold:cm_info:private] => 1
+                            [groupmode:cm_info:private] => 0
+                            [groupingid:cm_info:private] => 0
+                            [groupmembersonly:cm_info:private] => 0
+                            [indent:cm_info:private] => 0
+                            [completion:cm_info:private] => 0
+                            [completiongradeitemnumber:cm_info:private] => 
+                            [completionview:cm_info:private] => 0
+                            [completionexpected:cm_info:private] => 0
+                            [availablefrom:cm_info:private] => 0
+                            [availableuntil:cm_info:private] => 0
+                            [showavailability:cm_info:private] => 0
+                            [showdescription:cm_info:private] => 0
+                            [extra:cm_info:private] => 
+                            [icon:cm_info:private] => 
+                            [iconcomponent:cm_info:private] => 
+                            [modname:cm_info:private] => assign
+                            [module:cm_info:private] => 1
+                            [name:cm_info:private] => You are doomed
+                            [sectionnum:cm_info:private] => 3
+                            [section:cm_info:private] => 44
+                            [conditionscompletion:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsgrade:cm_info:private] => Array
+                                (
+                                )
+
+                            [conditionsfield:cm_info:private] => Array
+                                (
+                                )
+
+                            [available:cm_info:private] => 1
+                            [availableinfo:cm_info:private] => 
+                            [uservisible:cm_info:private] => 1
+                            [url:cm_info:private] => moodle_url Object
+                                (
+                                    [scheme:protected] => http
+                                    [host:protected] => computing-moodle.co.uk
+                                    [port:protected] => 
+                                    [user:protected] => 
+                                    [pass:protected] => 
+                                    [path:protected] => /mod/assign/view.php
+                                    [slashargument:protected] => 
+                                    [anchor:protected] => 
+                                    [params:protected] => Array
+                                        (
+                                            [id] => 114
+                                        )
+
+                                )
+
+                            [content:cm_info:private] => 
+                            [extraclasses:cm_info:private] => 
+                            [iconurl:cm_info:private] => 
+                            [onclick:cm_info:private] => 
+                            [customdata:cm_info:private] => 
+                            [afterlink:cm_info:private] => 
+                            [afterediticons:cm_info:private] => 
+                        )
+
+                )
+
+        )
+
+    [groups:course_modinfo:private] => 
+)
