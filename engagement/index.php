@@ -17,8 +17,8 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading("Hello World");
 echo $OUTPUT->box_start();
 // Do some clever stuff here!!
-//echo $OUTPUT->box(format_string(eng_course_list($id)));
-echo $OUTPUT->box(eng_course_list($id));
+$eng = new engagement($id);
+echo $OUTPUT->box($eng->course_list());
 
 echo $OUTPUT->box_end();
 echo $OUTPUT->footer();
