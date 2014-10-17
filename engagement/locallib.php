@@ -22,12 +22,17 @@ class engagement {
     // Use get_fast_modinfo to create an object to manipulate rather than keeping querying the table
     
     private $info;
+    private $courseId;
     
-    public function __construct($courseId){
-        $this->get_course_info($courseId);
+    public function __construct($course){
+        $this->courseId = $course;
+        $this->get_course_info($course);
     }
     
-    
+/**
+  * populates the $info object based on the Moodle internal course id.
+  * @param $id numeric course id. 
+  */
     private function get_course_info($id){
         global $DB;
 
@@ -35,43 +40,56 @@ class engagement {
         $this->info = get_fast_modinfo($course);
     }
 
-// retrieve the appropriate module information for each module id sent
-/*function eng_get_module_info($module_list){
-    
-    global $DB;
-    
-    $sql = "SELECT id, course, module FROM {log}";
-    
-    $rs = $DB->get_records_sql($sql);   
-    
-    return $module_detail_array;
-}*/
 
+/**
+  * produces a HTML listof modules in the course and accesses to those modules.
+  * Uses class variables $info and $courseId
+  * @return string HTML format list of modules and accesses
+  */ 
     public function course_list() {
         global $CFG, $DB;
-        // this block grabs data from the log file
-        //$sql = "SELECT id, course, module FROM {log}";
-        //$courses = $DB->get_records_sql($sql);
-        //$remotecoursecount = count($courses);  
-    
-        //$info = eng_get_course_info($id);
-    
+
+        $modAccessList; // A list of accesses for that course module
         $info_string = '';
     
         foreach ($this->info->cms as $modDesc){
             if($modDesc->url){
-                $info_string .= '<li>' . $modDesc->name . $modDesc->url->get_path() . $modDesc->url->get_param('id') .'</li>' ;
+               
+                
+                // https://docs.moodle.org/dev/Data_manipulation_API
+                // Build an SQL string to retrieve log entries linked to modules in the current course.
+                $sql  = "SELECT {log}.id AS 'logid', module, FROM_UNIXTIME(time) AS 'accessed', userid, username ";
+                $sql .= 'FROM {log} INNER JOIN {user} ON {log}.userid = {user}.id ';
+                $sql .= 'WHERE cmid = ' . $modDesc->url->get_param('id') . ' AND course = ' . $this->courseId; //DEBUG $info_string .= '<p>' . $sql . '</p>';
+                
+                // Query the Moodle database and return an array of rows.
+                $rs = $DB->get_records_sql($sql); // DEBUG $info_string .= $this->debug_object($rs);
+                
+                // Populate an ordered list of accesses
+                $modAccessList = '';
+                foreach($rs as $index => $row){
+                    $modAccessList .= '<li value="'. $index . '">' . $row->accessed . ' | ' . $row->userid . ' | ' . $row->username . '</li>';
+                }
+                //DEBUG $info_string .= '<li>' . $modDesc->name . $modDesc->url->get_path() . $modDesc->url->get_param('id') .'<ol>' . $modAccessList . '</ol></li>' ;
+                
+                //Build the output string
+                $info_string .= '<li>' . $modDesc->name .'<ol>' . $modAccessList . '</ol></li>' ;
+                
             }
         }
     
         $info_string = '<ul>' . $info_string . '</ul>';
     
-        $info_string = $info_string . $this->debug_object($this->info);
+        //DEBUG $info_string = $info_string . $this->debug_object($this->info);
     
         return $info_string;  // return the data in html list string format
 
     }
-
+/**
+  * A utility function that outputs a formatted dump of the object passed to it.
+  * @param $obj object of any type for outputs.
+  * @return string HTML formatted string of object properties.
+  */ 
     private function debug_object($obj){
 
         ob_start();  // start output buffering
