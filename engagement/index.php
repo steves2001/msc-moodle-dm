@@ -6,20 +6,23 @@ $id = required_param('id',PARAM_INT);       // course id
 
 $course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
 
-$PAGE->set_url('/report/engagement/index.php', array('id'=>$id));
-$PAGE->set_pagelayout('report');
-
 require_login($course);
 $context = context_course::instance($course->id);
 require_capability('report/engagement:view', $context);
 
+// https://docs.moodle.org/dev/Page_API
+$PAGE->set_url('/report/engagement/index.php', array('id'=>$id));
+$PAGE->set_title(get_string('pluginname', 'report_engagement'));
+$PAGE->set_pagelayout('report');
+
 echo $OUTPUT->header();
-echo $OUTPUT->heading("Hello World");
+echo $OUTPUT->heading(get_string('pluginname', 'report_engagement'));
 echo $OUTPUT->box_start();
 // Do some clever stuff here!!
-$eng = new engagement($id);
-echo $OUTPUT->box($eng->course_list());
-
+$eng = new engagement($PAGE->url, array('email'=>'me@me.com','id'=>$id));
+//echo $OUTPUT->box($eng->course_list());
+//$mform_simple = new simplehtml_form( null, array('email'=>'me@me.com','id'=>$id) );
+$eng->display();
 echo $OUTPUT->box_end();
 echo $OUTPUT->footer();
 
