@@ -39,27 +39,29 @@ class engagement extends moodleform {
         $this->courseId = $this->_customdata['id'];  // Store the currrent course id 
         $this->get_course_info($this->courseId);     // Grab all the current course info
         
-        $formRow = array();                          // An array of form elements for a row (module)
+        //$formRow = array();                          // An array of form elements for a row (module)
+        $calendartype = \core_calendar\type_factory::get_calendar_instance();
+        $calOptionsTrue  = array('startyear' => date('Y'), 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => true);
       
         // Start of the tracking form
         $mform =& $this->_form; // Don't forget the underscore! 
         
         //  Loop through each section
         foreach ($this->info->sections as $section=>$modules) {
+            
             // https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#Use_Fieldsets_to_group_Form_Elements
             $mform->addElement('header', 'Section' . $section, 'Section : ' . $section);
             $mform->setExpanded('Section' . $section);
-            
+            // Display a date selector to allow tracking of one section
+            $mform->addElement('date_selector', 'TrackSection' . $section, 'Track all elements on the same date ', $calOptionsTrue);
+
             // in each section loop through modules and create a form entry row
             foreach($modules as $module) {
                 if($this->info->cms[$module]->url){
-                    unset($formRow);
-                    $formRow = array();
-                    $formRow[] =& $mform->createElement('advcheckbox', 'module' . $module, $this->info->cms[$module]->name, null, array('group' => $module), array(0, $module));
-                    $formRow[] =& $mform->createElement('date_selector', 'completeBy', 'Complete task by');
+                    $mform->addElement('date_selector', 'module' . $module, $this->info->cms[$module]->name, $calOptionsTrue);
 
-                    // https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#addGroup
-                    $mform->addGroup($formRow, $module, $this->info->cms[$module]->name, array(' '), false);
+                    $mform->disabledIf('module' . $module, 'TrackSection' . $section .'[enabled]', 'checked');
+
                 } // End if
             } // End foreach modules
             
