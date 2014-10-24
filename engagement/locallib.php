@@ -24,8 +24,9 @@ require_once("$CFG->libdir/formslib.php"); // Required for building a moodle for
 
 class engagement extends moodleform {
     
-    private $info;
-    private $courseId;
+    private $info; /**< Array structure containing course information */
+    private $courseId; /**< The moodle course id from the database */
+    private $trackedModules; /**< Array of trackedModule details */
     
     
 /**
