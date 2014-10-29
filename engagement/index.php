@@ -18,12 +18,12 @@ $PAGE->set_pagelayout('report');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'report_engagement'));
 echo $OUTPUT->box_start();
+
 // Do some clever stuff here!!
 $eng = new engagement($PAGE->url, array('email'=>'me@me.com','id'=>$id));
-//echo $OUTPUT->box($eng->course_list());
-//$mform_simple = new simplehtml_form( null, array('email'=>'me@me.com','id'=>$id) );
 $eng->display();
 echo $OUTPUT->box_end();
+echo $OUTPUT->box($eng->debugData);
 echo $OUTPUT->footer();
 
 

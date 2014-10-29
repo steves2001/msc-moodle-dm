@@ -27,7 +27,7 @@ class engagement extends moodleform {
     private $info; /**< Array structure containing course information */
     private $courseId; /**< The moodle course id from the database */
     private $trackedModules; /**< Array of trackedModule details */
-    
+    public  $debugData = '';
     
 /**
   * standard method called on creation of a moodle formslib inherited class
@@ -37,10 +37,13 @@ class engagement extends moodleform {
   function definition() {
         global $CFG;
         
+        
         $this->courseId = $this->_customdata['id'];  // Store the currrent course id 
         $this->get_course_info($this->courseId);     // Grab all the current course info
-        
-        //$formRow = array();                          // An array of form elements for a row (module)
+        $this->get_tracking_info($this->courseId);   // Grab any existing tracking information for the course
+
+        $group = 0; // EXTRA CODE TO DECIDE GROUP
+      
         $calendartype = \core_calendar\type_factory::get_calendar_instance();
         $calOptionsTrue  = array('startyear' => date('Y'), 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => true);
       
@@ -60,7 +63,14 @@ class engagement extends moodleform {
             foreach($modules as $module) {
                 if($this->info->cms[$module]->url){
                     $mform->addElement('date_selector', 'module' . $module, $this->info->cms[$module]->name, $calOptionsTrue);
-
+                    
+                    foreach($this->trackedModules as $trackedMod){
+                        if($trackedMod->moduleid == $module && $trackedMod->groupid == $group){
+                            $mform->setDefault('module' . $module, $trackedMod->completeby);
+                            
+                        }
+                    }
+                    
                     $mform->disabledIf('module' . $module, 'TrackSection' . $section .'[enabled]', 'checked');
 
                 } // End if
@@ -74,10 +84,27 @@ class engagement extends moodleform {
         
     }  // end of definition()
     
+/**
+  * populates the $trackedModules array from the database table
+  * report_engagment based on the course id.
+  * 
+  * @param $id numeric moodle course id.
+  */     
+    private function get_tracking_info($id){
+        global $DB;
+        $sql = '';
+        $sql .= 'SELECT id, courseid, moduleid, groupid, completeby';
+        $sql .= ' FROM {report_engagement}';
+        $sql .= ' WHERE courseid = ' . $id;
+        
+        $this->trackedModules = $DB->get_records_sql($sql);
+        $this->debug_object($this->trackedModules);
+        
+    } // end of get_tracking_info()
     
 /**
   * populates the $info object based on the Moodle internal course id.
-  * @param $id numeric course id. 
+  * @param $id numeric moodle course id. 
   */
     private function get_course_info($id){
         global $DB;
@@ -103,9 +130,9 @@ class engagement extends moodleform {
 
         // https://docs.moodle.org/dev/Data_manipulation_API
         // Build an SQL string to retrieve log entries linked to modules in the current course.
-        $sql  = "SELECT {log}.id AS 'logid', module, FROM_UNIXTIME(time) AS 'accessed', userid, username ";
-        $sql .= 'FROM {log} INNER JOIN {user} ON {log}.userid = {user}.id ';
-        $sql .= 'WHERE cmid = ' . $cmid . ' AND course = ' . $this->courseId; 
+        $sql  = "SELECT {log}.id AS 'logid', module, FROM_UNIXTIME(time) AS 'accessed', userid, username";
+        $sql .= ' FROM {log} INNER JOIN {user} ON {log}.userid = {user}.id';
+        $sql .= ' WHERE cmid = ' . $cmid . ' AND course = ' . $this->courseId; 
                 
         // Query the Moodle database and return an array of rows.
         $rs = $DB->get_records_sql($sql); // DEBUG $info_string .= $this->debug_object($rs);
@@ -156,16 +183,15 @@ class engagement extends moodleform {
 /**
   * A utility function that outputs a formatted dump of the object passed to it.
   * @param $obj object of any type for outputs.
-  * @return string HTML formatted string of object properties.
   */ 
     private function debug_object($obj){
 
         ob_start();  // start output buffering
         print_object($obj);  // pretty print the info from the object
-        $debug_string = '<kbd>' . ob_get_contents() . '</kbd>'; // wrap a kbd tag to display it nice in the browser
+        $this->debugData .= '<kbd>' . ob_get_contents() . '</kbd>'; // wrap a kbd tag to display it nice in the browser
         ob_end_clean();  // end buffering and clear the buffer
     
-        return $debug_string;
+        
     } // end of debug_object()
     
 
