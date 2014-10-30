@@ -25,12 +25,13 @@ require_once("$CFG->libdir/formslib.php"); // Required for building a moodle for
 class engagement extends moodleform {
     
     
+    public  $debugData = ''; /**< Internal string to hold debug data NOT FOR PRODUCTION USE*/
+    
     private $info; /**< Array structure containing course information */
     private $courseId; /**< The moodle course id from the database */
     private $trackedModules; /**< Array of trackedModule details */
     private $group = 0; // EXTRA CODE TO DECIDE GROUP
-    public  $debugData = '';
-    
+    private $fullyTrackedSections = array();    
     
 /**
   * standard method called on creation of a moodle formslib inherited class
@@ -46,7 +47,7 @@ class engagement extends moodleform {
         $this->get_tracking_info($this->courseId);   // Grab any existing tracking information for the course
 
         
-      
+        // Make sure the date picker cannot go beyond the limit of the calendar
         $calendartype = \core_calendar\type_factory::get_calendar_instance();
         $calOptionsTrue  = array('startyear' => date('Y'), 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => true);
       
@@ -69,24 +70,44 @@ class engagement extends moodleform {
             $mform->setExpanded('Section' . $section);
             // Display a date selector to allow tracking of one section
             $mform->addElement('date_selector', 'TrackSection' . $section, 'Track all elements on the same date ', $calOptionsTrue);
+            // track the number of trackable modules in the section
+            $moduleCounter = 0;
+            $trackedModuleCounter = 0;
+            $lastDateTracked = 0;
 
             // in each section loop through modules and create a form entry row
             foreach($modules as $module) {
                 if($this->info->cms[$module]->url){
+                    $moduleCounter++;
                     $mform->addElement('date_selector', 'module' . $module, $module . " " . $this->info->cms[$module]->name, $calOptionsTrue);
                     
-                    foreach($this->trackedModules as $trackedMod){
+                    if($completeBy = $this->get_completion($module)) {
                         
-                        if($trackedMod->moduleid == $module){
-                            $mform->setDefault('module' . $module, $trackedMod->completeby);
+                        $mform->setDefault('module' . $module, $completeBy);
+                        
+                        if($lastDateTracked == 0) {
+                            $lastDateTracked = $completeBy;
+                            $trackedModuleCounter++;
+                        } else {
+                            if($lastDateTracked == $completeBy){
+                                $trackedModuleCounter++;
+                            }
                         }
                     }
                     
                     $mform->disabledIf('module' . $module, 'TrackSection' . $section .'[enabled]', 'checked');
 
                 } // End if
+                $this->debug_object('Module Counter ' . $moduleCounter . 'Tracked Module Counter' . $trackedModuleCounter);
+                
             } // End foreach modules
-            
+            if($moduleCounter == $trackedModuleCounter && $trackedModuleCounter > 0){
+                // All modules in the section have the same date and are tracked so set the 
+                // date for the section to the same date 
+                // $mform->setDefault('TrackSection' . $section, $lastDateTracked);
+                $this->fullyTrackedSections['TrackSection' . $section] = $lastDateTracked;
+                $this->debug_object('Last Date Tracked ' . $lastDateTracked);
+            }
         } // End foreach sections
       
         //Add the standard form buttons
@@ -95,13 +116,37 @@ class engagement extends moodleform {
         
     }  // end of definition()
 
+/**
+ * This is called after the form has been built and all data populated from last submission
+ */
+    public function definition_after_data() {
+        parent::definition_after_data();
+    
+        $mform =& $this->_form;
+        foreach($this->fullyTrackedSections as $sectionName => $sectionDate){
+            $sectionElement =& $mform->getElement($sectionName);  // Get the section element
+            // Create a date array to populate the separate selections boxes in the group.
+           
+            $dateValues['day'] = date('j',$sectionDate);
+            $dateValues['month'] = date('n',$sectionDate);
+            $dateValues['year'] = date('Y',$sectionDate);
+            $dateValues['enabled'] = 1;
+            // Call the set value method it iterates through the array setting the value (DO NOT Use a timestamp)
+            $sectionElement->setValue($dateValues);  
+             $this->debug_object($sectionElement);
+        } // End of foreach section
+    
+    } // End of definition_after_data
 
+    
     //DO: Store Module Tracking Info (Course Id)
 /**
   * stores the tracking information in the database for later recall
   * 
   */  
     public function store_tracking_info(){
+        global $DB;
+        
         $formData = array();
         $formData = (array) $this->get_data();
         
@@ -132,23 +177,25 @@ class engagement extends moodleform {
                 if($trackingDate != 0) {
                     
                     if($this->info->cms[$module]->url){
-                        if($this->is_tracked($module)){
-                             // if a tracking record already exists sql update
-                            $sql = "UPDATE {report_engagement} SET timemodified = " . $trackingDate; 
-                            $sql .= " WHERE courseid = " . $this->courseId;
-                            $sql .= " AND moduleid = " . $module;
-                            $sql .= " AND groupid = " . $this->group . ";";
-                            
-                            $this->debug_object('SQL Updating ' . $sql);
+                        
+                        $record = new stdClass();
+                        $record->timemodified = time();
+                        $record->courseid = $this->courseId;
+                        $record->moduleid = $module;
+                        $record->groupid = $this->group;
+                        $record->completeby = $trackingDate;
+                        
+                        if($rowId = $this->is_tracked($module)){
+                            // if a tracking record already exists sql update
+             
+                            $record->id = $rowId;
+                            $DB->update_record('report_engagement', $record);
 
                         } else {
                             // if a tracking record does not exist sql insert
-                            $sql = "INSERT INTO {report_engagement}"; 
-                            $sql .= " (id, timemodified, courseid, moduleid, groupid, completeby)";
-                            $sql .= " VALUES (NULL, UNIX_TIMESTAMP(), " . $this->courseId . ", " . $module . ", " . $this->group . ", " . $trackingDate . ");";
-
-                            $this->debug_object('SQL Inserting ' . $sql);
-                        
+                            
+                            $DB->insert_record('report_engagement', $record);
+                            
                         }
                     }
                 }
@@ -156,17 +203,38 @@ class engagement extends moodleform {
             }
         }
     }
-    
+ 
+/**
+  * A simple utility function to check if a module was previously tracked.
+  * 
+  * @param $module int The id number of the module to check
+  */
     private function is_tracked($module) {
-        
+        // Loop through the already tracked modules 
         foreach($this->trackedModules as $trackedMod){
             if($trackedMod->moduleid == $module){
-                return true;
+                //$this->debug_object($trackedMod);
+                return $trackedMod->id;
             }
         }
         return false;
     }
-    
+/**
+  * A simple utility function to check if a module was previously tracked.
+  * 
+  * @param $module int The id number of the module to check
+  */
+    private function get_completion($module) {
+        // Loop through the already tracked modules 
+        foreach($this->trackedModules as $trackedMod){
+            if($trackedMod->moduleid == $module){
+                //$this->debug_object($trackedMod);
+                return $trackedMod->completeby;
+            }
+        }
+        return false;
+    }
+        
     //DO: Remove Orphand Modules ()
 /**
   * checks for orphaned data e.g. user has deleted a module in the course
