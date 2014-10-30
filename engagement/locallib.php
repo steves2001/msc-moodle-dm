@@ -104,10 +104,9 @@ class engagement extends moodleform {
     public function store_tracking_info(){
         $formData = array();
         $formData = (array) $this->get_data();
-        //$this->debug_object($this->info->sections);
+        
         // For each section in the course
         foreach ($this->info->sections as $section=>$modules) {
-            $this->debug_object($modules);
 
             // For each module in the section
             foreach($modules as $module) {
@@ -131,16 +130,16 @@ class engagement extends moodleform {
                 } // End section date checking if
                 
                 if($trackingDate != 0) {
-                    foreach($this->trackedModules as $trackedMod){
-                        
-                        if($trackedMod->moduleid == $module){
+                    
+                    if($this->info->cms[$module]->url){
+                        if($this->is_tracked($module)){
                              // if a tracking record already exists sql update
                             $sql = "UPDATE {report_engagement} SET timemodified = " . $trackingDate; 
                             $sql .= " WHERE courseid = " . $this->courseId;
                             $sql .= " AND moduleid = " . $module;
                             $sql .= " AND groupid = " . $this->group . ";";
                             
-                            $this->debug_object('SQL Updating ' . $module);
+                            $this->debug_object('SQL Updating ' . $sql);
 
                         } else {
                             // if a tracking record does not exist sql insert
@@ -148,7 +147,7 @@ class engagement extends moodleform {
                             $sql .= " (id, timemodified, courseid, moduleid, groupid, completeby)";
                             $sql .= " VALUES (NULL, UNIX_TIMESTAMP(), " . $this->courseId . ", " . $module . ", " . $this->group . ", " . $trackingDate . ");";
 
-                            $this->debug_object('SQL Inserting ' . $module);
+                            $this->debug_object('SQL Inserting ' . $sql);
                         
                         }
                     }
@@ -194,7 +193,7 @@ class engagement extends moodleform {
         $sql .= ' WHERE courseid = ' . $id . ' AND groupid = ' . $this->group;
         
         $this->trackedModules = $DB->get_records_sql($sql);
-        $this->debug_object($this->trackedModules);
+        //$this->debug_object($this->trackedModules);
         
     } // end of get_tracking_info()
     
