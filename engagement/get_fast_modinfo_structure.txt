@@ -1,3 +1,24 @@
+stdClass Object
+(
+    [mform_isexpanded_id_Section0] => 1
+    [TrackSection0] => 1446076800
+    [module110] => 0
+    [mform_isexpanded_id_Section1] => 1
+    [TrackSection1] => 0
+    [module111] => 0
+    [mform_isexpanded_id_Section2] => 1
+    [TrackSection2] => 0
+    [module112] => 0
+    [mform_isexpanded_id_Section3] => 1
+    [TrackSection3] => 0
+    [module115] => 0
+    [module114] => 1419379200
+    [submitbutton] => Save changes
+)
+
+
+
+
 course_modinfo Object
 (
     [course:course_modinfo:private] => stdClass Object
