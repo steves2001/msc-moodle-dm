@@ -116,6 +116,16 @@ class engagement extends moodleform {
         
     }  // end of definition()
 
+    
+    private function build_date_array($timeStamp, $enabled){
+
+        $date['day'] = date('j',$timeStamp);
+        $date['month'] = date('n',$timeStamp);
+        $date['year'] = date('Y',$timeStamp);
+        $date['enabled'] = $enabled;
+        
+        return $date;
+    }
 /**
  * This is called after the form has been built and all data populated from last submission
  */
@@ -125,15 +135,10 @@ class engagement extends moodleform {
         $mform =& $this->_form;
         foreach($this->fullyTrackedSections as $sectionName => $sectionDate){
             $sectionElement =& $mform->getElement($sectionName);  // Get the section element
-            // Create a date array to populate the separate selections boxes in the group.
-           
-            $dateValues['day'] = date('j',$sectionDate);
-            $dateValues['month'] = date('n',$sectionDate);
-            $dateValues['year'] = date('Y',$sectionDate);
-            $dateValues['enabled'] = 1;
+            
             // Call the set value method it iterates through the array setting the value (DO NOT Use a timestamp)
-            $sectionElement->setValue($dateValues);  
-             $this->debug_object($sectionElement);
+            $sectionElement->setValue($this->build_date_array($sectionDate, 1));  
+            $this->debug_object($sectionElement);
         } // End of foreach section
     
     } // End of definition_after_data
