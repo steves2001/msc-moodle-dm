@@ -21,10 +21,11 @@ echo $OUTPUT->box_start();
 
 // Do some clever stuff here!!
 $eng = new engagement($PAGE->url, array('email'=>'me@me.com','id'=>$id));
-$eng->display();
+
 if($eng->is_submitted()){
-    $eng->store_tracking_info();
+//    $eng->store_tracking_info();
 }
+$eng->display();
 echo $OUTPUT->box_end();
 echo $OUTPUT->box($eng->debugData);
 //echo $OUTPUT->box(print_object($eng->get_data()));
