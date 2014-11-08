@@ -1,0 +1,17 @@
+digraph hierarchy {
+    label="trackingInfo Array Structure";
+    splines="line";
+    nodesep=1.0 // increases the separation between nodes
+                
+    node [color=Red,fontname=Courier,shape=box] //All nodes will this shape and colour
+    edge [color=Blue, style=solid] //All the lines look like this
+    rankdir=LR;  //Rank Direction Left to Right
+    trackingInfo [ label = "trackingInfo [array]" ]
+    trackingInfo->{Section1 Section2 SectionN }
+    Section1->{tracked trackDate element modules [ label = "modules [array]" ]}
+    modules->{module1 module2 modulen}
+    module1->{mname[ label = "name" ] melement[ label = "element" ] mtracked[ label = "tracked" ] mtrackDate [ label = "trackDate" ]}
+    {rank=same;Section1 Section2 SectionN}
+    {rank=same;module1 module2 modulen}  // Put them on the same level
+    {rank=same;mname melement mtracked mtrackDate} 
+}

@@ -25,7 +25,7 @@ require_once("$CFG->libdir/formslib.php"); // Required for building a moodle for
 class engagement extends moodleform {
     
     public  $debugData = ''; /**< Internal string to hold debug data NOT FOR PRODUCTION USE*/
-    private  $debugOn = false; /**< Enables or disables debug messages for this class*/
+    private $debugOn = true; /**< Enables or disables debug messages for this class*/
 
     private $info; /**< Array structure containing course information */
     private $courseId; /**< The moodle course id from the database */
@@ -66,7 +66,7 @@ class engagement extends moodleform {
 
             // in each section loop through modules and create a form entry row
             foreach($modules as $module) {
-                if($this->info->cms[$module]->url){
+                if(isset($this->info->cms[$module]->url)){
                     $mform->addElement('date_selector', 'module' . $module, $module . " " . $this->info->cms[$module]->name, $calOptionsTrue);
                     $mform->disabledIf('module' . $module, 'TrackSectionBox' . $section, 'checked');
                 } // End if
@@ -150,7 +150,15 @@ class engagement extends moodleform {
         }
         $this->debug_object($this->trackingInfo);
     }
-        
+
+/**
+  * Builds a date array for the datepicker form element.
+  * 
+  * @param int $timeStamp a unix timestamp representing the date.
+  * @param bool $enabled true for enabled, false disabled.
+  * 
+  * @return array with elements referenced by keys day, month, year, enabled.
+  */
     private function build_date_array($timeStamp, $enabled){
 
         $date['day'] = date('j',$timeStamp);
@@ -169,17 +177,18 @@ class engagement extends moodleform {
     public function definition_after_data() {
         parent::definition_after_data();
         
-        $this->get_tracking_info($this->courseId);       // grab any existing tracking information for the course
+        $this->get_tracking_info();       // grab any existing tracking information for the course
        
-        $this->remove_orphaned_modules($this->courseId); // remove orphaned data in the database
+
         
         // If the form was submitted
         if($this->is_submitted()){  
-            $this->store_tracking_info();                // store the form data in the database
-            $this->get_tracking_info($this->courseId);   // grab updated tracking information for the course
+            $this->store_tracking_info(); // store the form data in the database
+            $this->get_tracking_info();   // grab updated tracking information for the course
         }
         
-        $this->build_tracking_info();                    // build the $trackingInfo array data
+        $this->remove_orphaned_modules(); // remove orphaned data in the database       
+        $this->build_tracking_info();     // build the $trackingInfo array data
         
         $mform =& $this->_form;
         
@@ -214,7 +223,6 @@ class engagement extends moodleform {
         } // End section foreach section
     
     } // End of definition_after_data
-
     
 /**
   * stores the tracking information in the database for later recall
@@ -299,6 +307,8 @@ class engagement extends moodleform {
   * A simple utility function to check if a module was previously tracked.
   * 
   * @param $module int The id number of the module to check
+  * 
+  * @return int unix time stamp with the tracking date or 0 if not tracked
   */
     private function get_completion($module) {
         // Loop through the already tracked modules 
@@ -309,32 +319,45 @@ class engagement extends moodleform {
             }
         }
         return 0;
-    }
+    } 
         
     //DO: Remove Orphand Modules ()
 /**
   * checks for orphaned data e.g. user has deleted a module in the course
   * but tracking information is still in the database
   * 
-  * @param $id numeric moodle course id.
   */  
-    private function remove_orphaned_modules($id){
+    private function remove_orphaned_modules(){
+        global $DB;
+        
         $this->debug_object('remove_orphaned_modules');
-    }
+        
+        //loop through all modules in the tracking database
+         foreach($this->trackedModules as $trackedMod){
+             
+            //if stored module is not in course structure
+            if( !isset($this->info->cms[$trackedMod->moduleid]->url) ){  // using isset for improved performance https://bugs.php.net/bug.php?id=38812
+                
+                // add the module to the delete list or delete immediately?
+                $this->debug_object('Deleting Module' . $trackedMod->moduleid); 
+                $DB->delete_records('report_engagement', array('courseid'=>$this->courseId, 'moduleid'=>$trackedMod->moduleid, 'groupid'=>$this->group));
+            } // end if module not present
+         
+         } // end foreach tracked modules
     
+    } // end remove_orphaned_modules
     
 /**
   * populates the $trackedModules array from the database table
   * report_engagment based on the course id.
   * 
-  * @param $id numeric moodle course id.
   */     
-    private function get_tracking_info($id){
+    private function get_tracking_info(){
         global $DB;
         $sql = '';
         $sql .= 'SELECT id, courseid, moduleid, groupid, completeby';
         $sql .= ' FROM {report_engagement}';
-        $sql .= ' WHERE courseid = ' . $id . ' AND groupid = ' . $this->group;
+        $sql .= ' WHERE courseid = ' . $this->courseId . ' AND groupid = ' . $this->group;
         
         $this->trackedModules = $DB->get_records_sql($sql);
         
@@ -351,7 +374,6 @@ class engagement extends moodleform {
         $course = $DB->get_record('course', array('id' => $id));
         $this->info = get_fast_modinfo($course);
     } // end of get_course_info()
-    
     
 /**
  * produces an ordered list of the logs for the specfied module
@@ -383,7 +405,6 @@ class engagement extends moodleform {
         
         return '<ol>' . $modAccessList . '</ol>';
     } // end of get_module_logs()
-
     
 /**
   * produces a HTML listof modules in the course and accesses to those modules.
@@ -418,7 +439,6 @@ class engagement extends moodleform {
 
     } // end of course_list()
     
-    
 /**
   * A utility function that outputs a formatted dump of the object passed to it.
   * @param object $obj object of any type for output.
@@ -433,7 +453,6 @@ class engagement extends moodleform {
         }
         
     } // end of debug_object()
-    
 
 } // end of engagement class
 
