@@ -8,6 +8,10 @@ defined('MOODLE_INTERNAL') || die;
  */
 
 function report_engagement_cron(){
+    mtrace( "****************** Hi this is the engagement report ******************");
+    $student = array();
+    $course = 4; // Temporary Variable Replace With A Coded Solution
+    
     $access = date("G") * 60 + date("i");
     $go = 14 * 60 + 25;
     $diff = abs($access - $go);
@@ -15,6 +19,21 @@ function report_engagement_cron(){
     if ($diff > 2) return;
     
     global $DB;
+    
+    $sql_tracked_modules = 
+        
+"SELECT moduleid, completeby
+ FROM {report_engagement}
+ WHERE {report_engagement}.courseid = " . $course . 
+" AND   (TIMESTAMPDIFF (day, FROM_UNIXTIME({report_engagement}.completeby), CURDATE()) BETWEEN 1 AND 14)";
+    
+    $sql_course_users = 
+        
+"SELECT {user}.`id`, `username`, `firstname`, `lastname`, `email`, `aim`, `lastlogin`, `lastaccess` 
+ FROM {user} 
+ INNER JOIN {user_enrolments} ON {user}.id = {user_enrolments}.userid 
+ INNER JOIN {enrol} ON {user_enrolments}.enrolid = {enrol}.id
+ WHERE {enrol}.courseid = " . $course ;
     
     $sql_tracked_users =    
         
@@ -27,18 +46,52 @@ function report_engagement_cron(){
  INNER JOIN {user} ON {user}.id = {user_enrolments}.userid 
  INNER JOIN {log} ON {log}.userid = {user}.id
  INNER JOIN {report_engagement} on {log}.cmid = {report_engagement}.moduleid
- WHERE {log}.course = 4 
- AND   (TIMESTAMPDIFF (day, FROM_UNIXTIME({report_engagement}.completeby), CURDATE()) BETWEEN 1 AND 14)
+ WHERE {log}.course = " . $course .
+" AND   (TIMESTAMPDIFF (day, FROM_UNIXTIME({report_engagement}.completeby), CURDATE()) BETWEEN 1 AND 14)
  GROUP BY {log}.userid, {log}.cmid";
 
-    $tracked_users = $DB->get_records_sql($sql_tracked_users);
-
-    $debugData = count($tracked_users) .  "\n";
-    foreach($tracked_users as $index => $row){
-            $debugData .=  $index . " : " . $row->time . ", " . $row->email . "\n";
+    /* Get tracked modules */
+    $records = $DB->get_records_sql($sql_tracked_modules);
+    foreach($records as $index => $row){
+        $tracked_modules[$index] = $row->completeby;
     }
-   
+    $records = NULL;
+
+    /* Get all users on the course and add tracked modules to each user*/
+    $records = $DB->get_records_sql($sql_course_users);
+    foreach($records as $index => $row){
+
+        $student[$index]["username"] = $row->username;
+        $student[$index]["name"] = $row->firstname .  " " . $row->lastname;
+        $student[$index]["twitter"] = $row->aim;
+        $student[$index]["email"] = $row->email;
+        $student[$index]["modules"] = $tracked_modules;   
         
+    }        
+    $records = NULL;
+
+    /* Get user log entries for tracked modules */
+    $records = $DB->get_records_sql($sql_tracked_users);
+    foreach($records as $index => $row){
+        unset($student[$row->userid]["modules"][$row->cmid]);
+    }
+    $records = NULL;
+    
+    $debugData = "Student Report";
+    foreach($student as $index => $row){
+        $debugData .= "\n Student : " . $index . " ";
+        foreach($row as $key => $value){
+            if($key == "modules"){
+                foreach($value as $module => $due){
+                    $debugData .= "\n" . $module . " : " . date("d m y", $due);
+                }
+            }
+            else{
+                $debugData .= " : " . $key . " : " . $value;
+            }
+        }
+    }   
+    //print $debugData;
     mail('steves2001@gmail.com','Engagement Report', $debugData ); 
     
 }
