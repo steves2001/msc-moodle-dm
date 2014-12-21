@@ -22,7 +22,7 @@ function report_engagement_cron(){
     //if ($diff > 2) return;
     
     global $DB;
-    
+    $info = get_fast_modinfo($course);
     $sql_tracked_modules = 
         
 "SELECT moduleid, completeby
@@ -65,6 +65,7 @@ function report_engagement_cron(){
     foreach($records as $index => $row){
 
         $student[$index]["username"] = $row->username;
+        $student[$index]["firstname"] = $row->firstname;
         $student[$index]["name"] = $row->firstname .  " " . $row->lastname;
         $student[$index]["twitter"] = $row->aim;
         $student[$index]["email"] = $row->email;
@@ -99,23 +100,26 @@ function report_engagement_cron(){
         foreach($row as $key => $value){
             if($key == "modules"){
                 foreach($value as $module => $due){
-                    $summaryData .= "\n" . $module . " : " . date("d m y", $due);
+                    $summaryData .= "\n" . $info->cms[$module]->name . " should have been completed by : " . date("d-m-y", $due);
+                    $lateCount++;
                 }
             }
             else{
                 $summaryData .= " : " . $key . " : " . $value;
             }
-            $lateCount++;
+            
         }
         
         $debugData .= $summaryData;
         // If the student is overdue on work send a twitter direct message
         if($row["twitter"] != "" && $lateCount > 0){
-            $options = array("screen_name" => $row["twitter"], "text" => $summaryData);
+            $options = array("screen_name" => $row["twitter"], 
+                             "text" => "Hi " . $row["firstname"] . " You have missed " 
+                             . $lateCount . " activities on Moodle in the last two weeks. Please check your Moodle messages.");
             $connection->post('direct_messages/new', $options);
         }
     }   
-    //print $debugData;
+    
     mail('steves2001@gmail.com','Engagement Report', $debugData ); 
     
 }
