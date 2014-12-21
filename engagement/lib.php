@@ -1,5 +1,8 @@
 <?php
 defined('MOODLE_INTERNAL') || die;
+require_once('twitteroauth/twitteroauth.php'); // Abraham Williams Twitter REST API 
+
+
 
 /**
  * This function is called by moodles internal cron script
@@ -16,7 +19,7 @@ function report_engagement_cron(){
     $go = 14 * 60 + 25;
     $diff = abs($access - $go);
     
-    if ($diff > 2) return;
+    //if ($diff > 2) return;
     
     global $DB;
     
@@ -76,19 +79,40 @@ function report_engagement_cron(){
         unset($student[$row->userid]["modules"][$row->cmid]);
     }
     $records = NULL;
+    // Initialize the connection
     
+    
+    require_once('config.php');  // Twitter Account Credentials PRIVATE
+    $connection = new TwitterOAuth($DM_CFG->twit_consumer_key, 
+                                   $DM_CFG->twit_consumer_secret, 
+                                   $DM_CFG->twit_oauth_token, 
+                                   $DM_CFG->twit_oauth_token_secret);
+     
+    //$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret);
     $debugData = "Student Report";
+    
     foreach($student as $index => $row){
-        $debugData .= "\n Student : " . $index . " ";
+        
+        $summaryData = "\n Student : " . $index . " ";
+        $lateCount = 0;/**< Numeric count of hown many items a student has missed */
+        
         foreach($row as $key => $value){
             if($key == "modules"){
                 foreach($value as $module => $due){
-                    $debugData .= "\n" . $module . " : " . date("d m y", $due);
+                    $summaryData .= "\n" . $module . " : " . date("d m y", $due);
                 }
             }
             else{
-                $debugData .= " : " . $key . " : " . $value;
+                $summaryData .= " : " . $key . " : " . $value;
             }
+            $lateCount++;
+        }
+        
+        $debugData .= $summaryData;
+        // If the student is overdue on work send a twitter direct message
+        if($row["twitter"] != "" && $lateCount > 0){
+            $options = array("screen_name" => $row["twitter"], "text" => $summaryData);
+            $connection->post('direct_messages/new', $options);
         }
     }   
     //print $debugData;
