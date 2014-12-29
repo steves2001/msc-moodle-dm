@@ -19,7 +19,7 @@ function report_engagement_cron(){
     $go = 14 * 60 + 25;
     $diff = abs($access - $go);
     
-    //if ($diff > 2) return;
+    if ($diff > 2) return;
     
     global $DB;
     $info = get_fast_modinfo($course);
@@ -89,7 +89,7 @@ function report_engagement_cron(){
                                    $DM_CFG->twit_oauth_token, 
                                    $DM_CFG->twit_oauth_token_secret);
      
-    //$connection = new TwitterOAuth($consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret);
+   
     $debugData = "Student Report";
     
     foreach($student as $index => $row){
@@ -113,10 +113,13 @@ function report_engagement_cron(){
         $debugData .= $summaryData;
         // If the student is overdue on work send a twitter direct message
         if($row["twitter"] != "" && $lateCount > 0){
+            
             $options = array("screen_name" => $row["twitter"], 
                              "text" => "Hi " . $row["firstname"] . " You have missed " 
-                             . $lateCount . " activities on Moodle in the last two weeks. Please check your Moodle messages.");
+                             . $lateCount . " activities on Moodle in the last two weeks. Please check your email messages.");
             $connection->post('direct_messages/new', $options);
+            
+            mail($row["email"],"Missed coursework",$summaryData);
         }
     }   
     
