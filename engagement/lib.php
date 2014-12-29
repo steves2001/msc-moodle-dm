@@ -90,17 +90,19 @@ function report_engagement_cron(){
                                    $DM_CFG->twit_oauth_token_secret);
      
    
-    $debugData = "Student Report";
+    $debugData = "Student Report\n";
     
     foreach($student as $index => $row){
         
-        $summaryData = "\n Student : " . $index . " ";
-        $lateCount = 0;/**< Numeric count of hown many items a student has missed */
+        $summaryData = "";
+        $lateCount = 0;/**< Numeric count of how many items a student has missed */
+        $emailData = "";
+        $missedData = "";
         
         foreach($row as $key => $value){
             if($key == "modules"){
                 foreach($value as $module => $due){
-                    $summaryData .= "\n" . $info->cms[$module]->name . " should have been completed by : " . date("d-m-y", $due);
+                    $missedData .= "\n" . $info->cms[$module]->name . " should have been completed by : " . date("d-m-y", $due);
                     $lateCount++;
                 }
             }
@@ -110,19 +112,41 @@ function report_engagement_cron(){
             
         }
         
-        $debugData .= $summaryData;
+        // Build digest email for lecturer
+        $debugData .= "\n Student : " . $index . "\n " . $summaryData . $missedData;
+        
         // If the student is overdue on work send a twitter direct message
-        if($row["twitter"] != "" && $lateCount > 0){
+        if($row["twitter"] != ""){
+            if($lateCount > 0){
             
-            $options = array("screen_name" => $row["twitter"], 
-                             "text" => "Hi " . $row["firstname"] . " You have missed " 
-                             . $lateCount . " activities on Moodle in the last two weeks. Please check your email messages.");
+                // Build a twitter direct message
+                $options = array("screen_name" => $row["twitter"], 
+                "text" => "Hi " . $row["firstname"] . " You have missed " 
+                . $lateCount . " activities on Moodle in the last two weeks. Please check your email messages.");
+            
+                //Build an email message to detail the missed work.
+                $emailData = "Hi " 
+                . $row["firstname"] 
+                . ",\n you seem to have missed some work on Moodle in the last two weeks. "
+                . "To catch up you need to complete the following:\n" 
+                . $missedData;
+                //Send email
+                mail($row["email"],"Missed coursework", $emailData);
+                
+            }else{
+                
+                 // Build a twitter direct message
+                $options = array("screen_name" => $row["twitter"], 
+                "text" => "Hi " . $row["firstname"] . " You have completed all your activities on Moodle in the last two weeks. well done!");
+               
+            }
+            //Send message
             $connection->post('direct_messages/new', $options);
-            
-            mail($row["email"],"Missed coursework",$summaryData);
+
         }
-    }   
+    }
     
+    //Send digest email to lecturer.
     mail('steves2001@gmail.com','Engagement Report', $debugData ); 
     
 }
