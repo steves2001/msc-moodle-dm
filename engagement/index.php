@@ -22,7 +22,7 @@ echo $OUTPUT->box_start();
 // Do some clever stuff here!!
 $eng = new engagement($PAGE->url, 
                       array('email'=>$USER->email,
-                            'userId'=>$USER->id,
+                            'userid'=>$USER->id,
                             'fullname'=>$USER->firstname . ' ' . $USER->lastname,
                             'id'=>$id));
 

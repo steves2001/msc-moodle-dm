@@ -235,9 +235,16 @@ class engagement extends moodleform {
         $lecturerRecord = new stdClass();
         $lecturerRecord->timemodified = time();
         $lecturerRecord->courseid = $this->courseId;
-        $lecturerRecord->userId = $this->_customdata['userId'];
+        $lecturerRecord->userid = $this->_customdata['userid'];
         $lecturerRecord->fullname = $this->_customdata['fullname'];
         $lecturerRecord->email = $this->_customdata['email'];
+        
+        if($lecturerId = $DB->get_field('report_engagement_lecturers', 'id', array ('courseid'=>$lecturerRecord->courseid, 'userid'=>$lecturerRecord->userid))){
+           $lecturerRecord->id = $lecturerId;
+           $DB->update_record('report_engagement_lecturers', $lecturerRecord); 
+        }else{
+           $DB->insert_record('report_engagement_lecturers', $lecturerRecord); 
+        }
         
         $this->debug_object($lecturerRecord);
 
