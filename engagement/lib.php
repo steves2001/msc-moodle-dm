@@ -10,6 +10,20 @@ require_once('twitteroauth/twitteroauth.php'); // Abraham Williams Twitter REST 
 
 function report_engagement_cron(){
     mtrace( "****************** Hi this is the engagement report ******************");
+    
+    /*
+    Next stage of development
+    
+        Retrieve the lecturers and course ids from the engagement_report_lecturers table
+        Extract unique course ids so checking takes place once per course and add lecturers to the list
+        
+        Course  Lecturers
+        4       13, 14, 100
+        25      2, 14
+        
+        At the end loop through the lecturers sending summaries to them.   
+    */
+    
     $student = array();
     $course = 4; // Temporary Variable Replace With A Coded Solution
     

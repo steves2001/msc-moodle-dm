@@ -239,14 +239,17 @@ class engagement extends moodleform {
         $lecturerRecord->fullname = $this->_customdata['fullname'];
         $lecturerRecord->email = $this->_customdata['email'];
         
+        //Check to see if there is an existing entry for this lecturer on this course
         if($lecturerId = $DB->get_field('report_engagement_lecturers', 'id', array ('courseid'=>$lecturerRecord->courseid, 'userid'=>$lecturerRecord->userid))){
+           //If the record exists update it
            $lecturerRecord->id = $lecturerId;
            $DB->update_record('report_engagement_lecturers', $lecturerRecord); 
         }else{
+           // If the record did not exist create a new record.
            $DB->insert_record('report_engagement_lecturers', $lecturerRecord); 
         }
         
-        $this->debug_object($lecturerRecord);
+        //$this->debug_object($lecturerRecord);
 
         $formData = array();
         $formData = (array) $this->get_data();
