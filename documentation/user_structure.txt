@@ -1,0 +1,103 @@
+stdClass Object
+(
+    [id] => 2
+    [auth] => manual
+    [confirmed] => 1
+    [policyagreed] => 0
+    [deleted] => 0
+    [suspended] => 0
+    [mnethostid] => 1
+    [username] => Stephen
+    [idnumber] => 
+    [firstname] => Admin
+    [lastname] => User
+    [email] => moodle@stephensmith.me.uk
+    [emailstop] => 0
+    [icq] => 
+    [skype] => 
+    [yahoo] => 
+    [aim] => 
+    [msn] => 
+    [phone1] => 
+    [phone2] => 
+    [institution] => 
+    [department] => 
+    [address] => 
+    [city] => Lincoln
+    [country] => GB
+    [lang] => en
+    [calendartype] => gregorian
+    [theme] => 
+    [timezone] => 99
+    [firstaccess] => 1385549864
+    [lastaccess] => 1420022482
+    [lastlogin] => 1419938116
+    [currentlogin] => 1420022185
+    [lastip] => 194.83.164.22
+    [secret] => 
+    [picture] => 0
+    [url] => 
+    [descriptionformat] => 1
+    [mailformat] => 1
+    [maildigest] => 0
+    [maildisplay] => 1
+    [autosubscribe] => 1
+    [trackforums] => 0
+    [timecreated] => 0
+    [timemodified] => 1412498665
+    [trustbitmask] => 0
+    [imagealt] => 
+    [lastnamephonetic] => 
+    [firstnamephonetic] => 
+    [middlename] => 
+    [alternatename] => 
+    [lastcourseaccess] => Array
+        (
+            [3] => 1418560440
+            [4] => 1419942324
+        )
+
+    [currentcourseaccess] => Array
+        (
+            [4] => 1420022482
+        )
+
+    [groupmember] => Array
+        (
+        )
+
+    [profile] => Array
+        (
+        )
+
+    [sesskey] => ABLUTbw8kA
+    [preference] => Array
+        (
+            [admin_bookmarks] => toolxmld
+            [block4hidden] => 1
+            [block5hidden] => 0
+            [email_bounce_count] => 1
+            [email_send_count] => 9
+            [filepicker_recentlicense] => allrightsreserved
+            [filepicker_recentrepository] => 4
+            [filepicker_recentviewmode] => 1
+            [htmleditor] => 
+            [quiz_qbanktool_open] => 1
+            [usemodchooser] => 0
+            [_lastloaded] => 1420022533
+        )
+
+    [message_lastpopup] => 0
+    [ajax_updatable_user_prefs] => Array
+        (
+            [block4hidden] => bool
+            [block5hidden] => bool
+            [block3hidden] => bool
+            [block17hidden] => bool
+            [block18hidden] => bool
+            [block19hidden] => bool
+            [block20hidden] => bool
+        )
+
+    [editing] => 0
+)

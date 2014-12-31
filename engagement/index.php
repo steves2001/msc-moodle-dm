@@ -20,7 +20,11 @@ echo $OUTPUT->heading(get_string('pluginname', 'report_engagement'));
 echo $OUTPUT->box_start();
 
 // Do some clever stuff here!!
-$eng = new engagement($PAGE->url, array('email'=>'me@me.com','id'=>$id));
+$eng = new engagement($PAGE->url, 
+                      array('email'=>$USER->email,
+                            'userId'=>$USER->id,
+                            'fullname'=>$USER->firstname . ' ' . $USER->lastname,
+                            'id'=>$id));
 
 if($eng->is_submitted()){
 //    $eng->store_tracking_info();
@@ -28,7 +32,6 @@ if($eng->is_submitted()){
 $eng->display();
 echo $OUTPUT->box_end();
 echo $OUTPUT->box($eng->debugData);
-//echo $OUTPUT->box(print_object($eng->get_data()));
 echo $OUTPUT->footer();
 
 

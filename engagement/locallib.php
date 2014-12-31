@@ -39,8 +39,8 @@ class engagement extends moodleform {
   */
   function definition() {
         global $CFG;
-        
-        $this->courseId = $this->_customdata['id'];  // Store the currrent course id 
+      
+        $this->courseId = $this->_customdata['id'];  // Store the current course id 
         $this->get_course_info($this->courseId);     // Grab all the current course info
         
         // Make sure the date picker cannot go beyond the limit of the calendar
@@ -148,7 +148,7 @@ class engagement extends moodleform {
                 $this->trackingInfo[$section]['trackDate'] = time();
             }
         }
-        $this->debug_object($this->trackingInfo);
+        //$this->debug_object($this->trackingInfo);
     }
 
 /**
@@ -231,9 +231,19 @@ class engagement extends moodleform {
     public function store_tracking_info(){
         global $DB;
         
+        // Build lecturer record for emailing each week
+        $lecturerRecord = new stdClass();
+        $lecturerRecord->timemodified = time();
+        $lecturerRecord->courseid = $this->courseId;
+        $lecturerRecord->userId = $this->_customdata['userId'];
+        $lecturerRecord->fullname = $this->_customdata['fullname'];
+        $lecturerRecord->email = $this->_customdata['email'];
+        
+        $this->debug_object($lecturerRecord);
+
         $formData = array();
         $formData = (array) $this->get_data();
-        $this->debug_object($formData);
+        //$this->debug_object($formData);
         // For each section in the course
         foreach ($this->info->sections as $section=>$modules) {
 
@@ -321,7 +331,7 @@ class engagement extends moodleform {
         return 0;
     } 
         
-    //DO: Remove Orphand Modules ()
+    
 /**
   * checks for orphaned data e.g. user has deleted a module in the course
   * but tracking information is still in the database
@@ -330,7 +340,7 @@ class engagement extends moodleform {
     private function remove_orphaned_modules(){
         global $DB;
         
-        $this->debug_object('remove_orphaned_modules');
+        //$this->debug_object('remove_orphaned_modules');
         
         //loop through all modules in the tracking database
          foreach($this->trackedModules as $trackedMod){

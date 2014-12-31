@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="report/engagement/db" VERSION="20141024" COMMENT="XMLDB file for Moodle report/engagement"
+<XMLDB PATH="report/engagement/db" VERSION="20141231" COMMENT="XMLDB file for Moodle report/engagement"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -12,6 +12,19 @@
         <FIELD NAME="moduleid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodles internal id for a module"/>
         <FIELD NAME="groupid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The group to be monitored 0 means no grouping"/>
         <FIELD NAME="completeby" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="a timestamp of the time the module is to be completed by"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="report_engagement_lecturers" COMMENT="holds the details of lecturers to be contacted regarding the courses engagement.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The last time this record was changed"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodles internal course id"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodles internal user id for the lecturer"/>
+        <FIELD NAME="fullname" TYPE="char" LENGTH="201" NOTNULL="true" SEQUENCE="false" COMMENT="The full name of the lecturer for addressing emails"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Email address of the lecturer"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

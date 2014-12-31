@@ -1,0 +1,8 @@
+stdClass Object
+(
+    [timemodified] => 1420024397
+    [courseid] => 4
+    [userid] => 2
+    [fullname] => Admin User
+    [email] => moodle@stephensmith.me.uk
+)
