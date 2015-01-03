@@ -45,8 +45,8 @@ class engagement extends moodleform {
         
         // Make sure the date picker cannot go beyond the limit of the calendar
         $calendartype = \core_calendar\type_factory::get_calendar_instance();
-        $calOptionsTrue  = array('startyear' => date('Y'), 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => true);
-        $calOptionsFalse  = array('startyear' => date('Y'), 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => false);
+        $calOptionsTrue  = array('startyear' => date('Y')-1, 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => true);
+        $calOptionsFalse  = array('startyear' => date('Y')-1, 'stopyear' => $calendartype->get_max_year(), 'timezone'=>99 ,'optional' => false);
       
         // Start of the tracking form
         $mform =& $this->_form; // Don't forget the underscore!
@@ -207,6 +207,13 @@ class engagement extends moodleform {
             }
             
             // loop through the sections modules
+            /*
+            BUGFIX When accessing new course 
+            
+            Notice: Undefined index: modules in /homepages/43/d520356031/htdocs/clickandbuilds/Moodle/moodle/report/engagement/locallib.php on line 210
+            Warning: Invalid argument supplied for foreach() in /homepages/43/d520356031/htdocs/clickandbuilds/Moodle/moodle/report/engagement/locallib.php on line 210
+            */
+            if(isset($sectionDetails['modules']))
             foreach($sectionDetails['modules'] as $module=>$moduleDetails ) {
                 
                 $moduleElement =& $mform->getElement('module' . $module);

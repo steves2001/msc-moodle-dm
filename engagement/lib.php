@@ -11,31 +11,29 @@ require_once('twitteroauth/twitteroauth.php'); // Abraham Williams Twitter REST 
 function report_engagement_cron(){
     mtrace( "****************** Hi this is the engagement report ******************");
     
-    /*
-    Next stage of development
+
+    $tables['lecturer'] = 'report_engagement_lecturers';
+    $tables['tracking'] = 'report_engagement';
     
-        Retrieve the lecturers and course ids from the engagement_report_lecturers table
-        Extract unique course ids so checking takes place once per course and add lecturers to the list
-        
-        Course  Lecturers
-        4       13, 14, 100
-        25      2, 14
-        
-        At the end loop through the lecturers sending summaries to them.   
-    */
+    $student = array();         /**< Array of students and the modules they have missed */
+    $lecturer = array();        /**< Array of lecturer details */
+    $courseLecturer = array();  /**< Array of courses and lecturer ids */
+    $course = 4;                // Temporary Variable Replace With A Coded Solution
     
-    $student = array();
-    $course = 4; // Temporary Variable Replace With A Coded Solution
-    
+    // Code to limit the script running to a fixed time of day
+    // this needs rewriting to a function
     $access = date("G") * 60 + date("i");
     $go = 14 * 60 + 25;
     $diff = abs($access - $go);
+    // End of the time limit code
     
     if ($diff > 2) return;
     
     global $DB;
+    
     $info = get_fast_modinfo($course);
     $courseInfo = $info->get_course();
+    
     
     $sql_tracked_modules = 
         
@@ -66,24 +64,71 @@ function report_engagement_cron(){
  WHERE {log}.course = " . $course .
 " AND   (TIMESTAMPDIFF (day, FROM_UNIXTIME({report_engagement}.completeby), CURDATE()) BETWEEN 1 AND 14)
  GROUP BY {log}.userid, {log}.cmid";
+    
+    /*
+    Next stage of development
+    
+        Retrieve the lecturers and course ids from the engagement_report_lecturers table
+        Extract unique course ids so checking takes place once per course and add lecturers to the list
+        
+        Course  Lecturers
+        4       13, 14, 100
+        25      2, 14
+        
+        At the end loop through the lecturers sending summaries to them.   
+    */
+    
+    /* Get the lecturer details */
+    
+    $rs = $DB->get_recordset($tables['lecturer']);
+    
+    foreach ($rs as $record) {
 
+        /* populate the the lecturer array key is the lecturer id */
+        if(!isset($lecturer[$record->userid])){
+            $lecturer[$record->userid]['fullname'] = $record->fullname;
+            $lecturer[$record->userid]['email']    = $record->email;
+        }
+
+        /* if there are no lectuers assigned to the course set the count to 0 */
+        if( !isset($courseLecturer[$record->courseid]['count']) ){
+            $courseLecturer[$record->courseid]['count'] = 0;
+        }
+        
+        /* add the lecturer id to the list of lecturers tracking that course */
+        $courseLecturer[$record->courseid]['lecturers'][$courseLecturer[$record->courseid]['count']] = $record->userid;
+        $courseLecturer[$record->courseid]['count']++;
+    }
+    
+    $rs->close();
+    //print_r($courseLecturer);
+    //print_r($lecturer);
+    $records = NULL;
     /* Get tracked modules */
     $records = $DB->get_records_sql($sql_tracked_modules);
+    
+    /* if there are tracked records */
+    if(!empty($records)){
+    $tracked_modules = array();
     foreach($records as $index => $row){
         $tracked_modules[$index] = $row->completeby;
     }
     $records = NULL;
-
+    
     /* Get all users on the course and add tracked modules to each user*/
     $records = $DB->get_records_sql($sql_course_users);
     foreach($records as $index => $row){
-
-        $student[$index]["username"] = $row->username;
-        $student[$index]["firstname"] = $row->firstname;
-        $student[$index]["name"] = $row->firstname .  " " . $row->lastname;
-        $student[$index]["twitter"] = $row->aim;
-        $student[$index]["email"] = $row->email;
-        $student[$index]["modules"] = $tracked_modules;   
+        
+        /* if the user is not a lecturer */
+        if( !isset($lecturer[$index]) ){
+            $student[$index]["username"] = $row->username;
+            $student[$index]["firstname"] = $row->firstname;
+            $student[$index]["name"] = $row->firstname .  " " . $row->lastname;
+            $student[$index]["twitter"] = $row->aim;
+            $student[$index]["email"] = $row->email;
+            $student[$index]["modules"] = $tracked_modules; 
+            //print_r($student[$index]);
+        }
         
     }        
     $records = NULL;
@@ -167,6 +212,7 @@ function report_engagement_cron(){
     
     //Send digest email to lecturer.
     mail('steves2001@gmail.com','Engagement Report', $debugData, 'From: ' . 'noreply@computing-moodle.co.uk' . "\r\n" ); 
+    } // end of the if relating to whether we have any records to track
     
 }
 
