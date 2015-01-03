@@ -10,7 +10,9 @@ require_once('twitteroauth/twitteroauth.php'); // Abraham Williams Twitter REST 
 
 function report_engagement_cron(){
     mtrace( "****************** Hi this is the engagement report ******************");
-    
+    $mail = true;               /**< Boolean set to true to enable emailing */
+    $twitter = true;            /**< Boolean set to true to enable twitter DM */
+    $restrict = false;          /**< Boolean set to true to restrict script execution to a single attempt a day */
 
     $tables['lecturer'] = 'report_engagement_lecturers';
     $tables['tracking'] = 'report_engagement';
@@ -18,7 +20,7 @@ function report_engagement_cron(){
     $student = array();         /**< Array of students and the modules they have missed */
     $lecturer = array();        /**< Array of lecturer details */
     $courseLecturer = array();  /**< Array of courses and lecturer ids */
-    $course = 4;                // Temporary Variable Replace With A Coded Solution
+    
     
     // Code to limit the script running to a fixed time of day
     // this needs rewriting to a function
@@ -27,19 +29,15 @@ function report_engagement_cron(){
     $diff = abs($access - $go);
     // End of the time limit code
     
-    if ($diff > 2) return;
+    if ($restrict && $diff > 2) return;
     
     global $DB;
-    
-    $info = get_fast_modinfo($course);
-    $courseInfo = $info->get_course();
-    
     
     $sql_tracked_modules = 
         
 "SELECT moduleid, completeby
  FROM {report_engagement}
- WHERE {report_engagement}.courseid = " . $course . 
+ WHERE {report_engagement}.courseid = ?" . 
 " AND   (TIMESTAMPDIFF (day, FROM_UNIXTIME({report_engagement}.completeby), CURDATE()) BETWEEN 1 AND 14)";
     
     $sql_course_users = 
@@ -48,7 +46,7 @@ function report_engagement_cron(){
  FROM {user} 
  INNER JOIN {user_enrolments} ON {user}.id = {user_enrolments}.userid 
  INNER JOIN {enrol} ON {user_enrolments}.enrolid = {enrol}.id
- WHERE {enrol}.courseid = " . $course ;
+ WHERE {enrol}.courseid = ?";
     
     $sql_tracked_users =    
         
@@ -61,23 +59,11 @@ function report_engagement_cron(){
  INNER JOIN {user} ON {user}.id = {user_enrolments}.userid 
  INNER JOIN {log} ON {log}.userid = {user}.id
  INNER JOIN {report_engagement} on {log}.cmid = {report_engagement}.moduleid
- WHERE {log}.course = " . $course .
+ WHERE {log}.course = ?" .
 " AND   (TIMESTAMPDIFF (day, FROM_UNIXTIME({report_engagement}.completeby), CURDATE()) BETWEEN 1 AND 14)
  GROUP BY {log}.userid, {log}.cmid";
     
-    /*
-    Next stage of development
-    
-        Retrieve the lecturers and course ids from the engagement_report_lecturers table
-        Extract unique course ids so checking takes place once per course and add lecturers to the list
-        
-        Course  Lecturers
-        4       13, 14, 100
-        25      2, 14
-        
-        At the end loop through the lecturers sending summaries to them.   
-    */
-    
+
     /* Get the lecturer details */
     
     $rs = $DB->get_recordset($tables['lecturer']);
@@ -101,120 +87,153 @@ function report_engagement_cron(){
     }
     
     $rs->close();
-    //print_r($courseLecturer);
-    //print_r($lecturer);
-    $records = NULL;
-    /* Get tracked modules */
-    $records = $DB->get_records_sql($sql_tracked_modules);
-    
-    /* if there are tracked records */
-    if(!empty($records)){
-    $tracked_modules = array();
-    foreach($records as $index => $row){
-        $tracked_modules[$index] = $row->completeby;
-    }
-    $records = NULL;
-    
-    /* Get all users on the course and add tracked modules to each user*/
-    $records = $DB->get_records_sql($sql_course_users);
-    foreach($records as $index => $row){
-        
-        /* if the user is not a lecturer */
-        if( !isset($lecturer[$index]) ){
-            $student[$index]["username"] = $row->username;
-            $student[$index]["firstname"] = $row->firstname;
-            $student[$index]["name"] = $row->firstname .  " " . $row->lastname;
-            $student[$index]["twitter"] = $row->aim;
-            $student[$index]["email"] = $row->email;
-            $student[$index]["modules"] = $tracked_modules; 
-            //print_r($student[$index]);
-        }
-        
-    }        
-    $records = NULL;
+    /* loop through the courses that are tracked */
+    foreach($courseLecturer as $course => $lecturerList){
+       
+        $info = get_fast_modinfo($course);
+        $courseInfo = $info->get_course();
 
-    /* Get user log entries for tracked modules */
-    $records = $DB->get_records_sql($sql_tracked_users);
-    foreach($records as $index => $row){
-        unset($student[$row->userid]["modules"][$row->cmid]);
-    }
-    $records = NULL;
+        $records = NULL;
+        
+        /* Get tracked modules */
+        $records = $DB->get_records_sql($sql_tracked_modules, array($course));
     
-    require_once('config.php');  // Twitter Account Credentials PRIVATE
-    // Initialize the connection
-    $connection = new TwitterOAuth($DM_CFG->twit_consumer_key, 
+        /* if there are tracked records */
+        if(!empty($records)){
+        
+            $tracked_modules = array();
+        
+            foreach($records as $index => $row){
+                $tracked_modules[$index] = $row->completeby;
+            
+            } /* end foreach */
+        
+            $records = NULL;
+    
+            /* Get all users on the course and add tracked modules to each user*/
+            $records = $DB->get_records_sql($sql_course_users, array($course));
+            
+            $student = NULL;
+            
+            foreach($records as $index => $row){
+        
+                /* if the user is not a lecturer */
+                if( !isset($lecturer[$index]) ){
+                    $student[$index]["username"] = $row->username;
+                    $student[$index]["firstname"] = $row->firstname;
+                    $student[$index]["name"] = $row->firstname .  " " . $row->lastname;
+                    $student[$index]["twitter"] = $row->aim;
+                    $student[$index]["email"] = $row->email;
+                    $student[$index]["modules"] = $tracked_modules; 
+                } /* end if user is not a lecturer */
+        
+            } /* end for each user on course */ 
+        
+            $records = NULL;
+            /* if there were any students on the course */
+            if(isset($student)){
+                
+                /* Get user log entries for tracked modules */
+                $records = $DB->get_records_sql($sql_tracked_users, array($course));
+                foreach($records as $index => $row){
+                    unset($student[$row->userid]["modules"][$row->cmid]);
+                } /* end log entry loop */
+        
+                $records = NULL;
+                /* end get user log entries */
+        
+                /* set up twitter authentication info */
+                require_once('config.php');  /* Twitter Account Credentials PRIVATE */
+        
+                $connection = new TwitterOAuth($DM_CFG->twit_consumer_key, 
                                    $DM_CFG->twit_consumer_secret, 
                                    $DM_CFG->twit_oauth_token, 
                                    $DM_CFG->twit_oauth_token_secret);
    
-    $debugData = "Student Report\n";
-    
-    foreach($student as $index => $row){
-        
-        $summaryData = "";/**< String containing student summary info */
-        $lateCount   = 0; /**< Numeric count of how many items a student has missed */
-        $emailData   = "";/**< String to hold the students email message */
-        $missedData  = $courseInfo->fullname . "\n"; /**< String to hold the info on what the student missed */
-        
-        //Loop through the students details
-        foreach($row as $key => $value){
-            if($key == "modules"){
-                foreach($value as $module => $due){
-                    $sectionInfo = $info->get_section_info($info->cms[$module]->sectionnum);
-                    
-                    $missedData .= "\n" . $info->cms[$module]->name 
-                        . " in section " . $info->cms[$module]->sectionnum 
-                        . " " . $sectionInfo->name
-                        . " should have been completed by : " 
-                        . date("d-m-y", $due);
-                    $lateCount++;
-                }
-            }
-            else{
-                $summaryData .= " : " . $key . " : " . $value;
-            }
-            
-        }
-        
-        // Build digest email for lecturer
-        $debugData .= "\n Student : " . $index . $summaryData . "\n " . $missedData;
-        
-        // If the student is overdue on work send a twitter direct message
-        if($row["twitter"] != ""){
-            if($lateCount > 0){
-            
-                // Build a twitter direct message
-                $options = array("screen_name" => $row["twitter"], 
-                "text" => "Hi " . $row["firstname"] . " You have missed " 
-                . $lateCount . " activities on Moodle in the last two weeks. Please check your email messages.");
-            
-                //Build an email message to detail the missed work.
-                $emailData = "Hi " 
-                . $row["firstname"] 
-                . ",\n you seem to have missed some work on Moodle in the last two weeks. "
-                . "To catch up you need to complete the following:\n" 
-                . $missedData;
-                //Send email
-                mail($row["email"],"Missed coursework", $emailData, 'From: ' . 'moodle@stephensmith.me.uk' . "\r\n");
-                
-            }else{
-                
-                 // Build a twitter direct message
-                $options = array("screen_name" => $row["twitter"], 
-                "text" => "Hi " . $row["firstname"] . " You have completed all your activities on Moodle in the last two weeks. well done!");
-               
-            }
-            //Send message
-            $connection->post('direct_messages/new', $options);
+                $digestData = "Student Report\n";
 
-        }
-    }
+                /* for each student on the course */    
+                foreach($student as $index => $row){
+        
+                    $summaryData = "";/**< String containing student summary info */
+                    $lateCount   = 0; /**< Numeric count of how many items a student has missed */
+                    $emailData   = "";/**< String to hold the students email message */
+                    $missedData  = "\n" . $courseInfo->fullname . "\n"; /**< String to hold the info on what the student missed */
+                    
+                    /* loop through the current students details */
+                    foreach($row as $key => $value){
+                        if($key == "modules"){
+                            /* if this is the modules array for the student loop through identifying missed modules */
+                            foreach($value as $module => $due){
+                                $sectionInfo = $info->get_section_info($info->cms[$module]->sectionnum);
+                    
+                                $missedData .= "\n     " . $info->cms[$module]->name 
+                                . " in section " . $info->cms[$module]->sectionnum 
+                                . " " . $sectionInfo->name
+                                . " should have been completed by : " 
+                                . date("d-m-y", $due);
+                                $lateCount++;
+                            } /* end of module checking loop */
+                        } else {
+                            /* if it wasn't the module array build the other data as a string*/
+                            $summaryData .= " : " . $key . " : " . $value;
+                        } /* end of the module if */
+            
+                    } /* end of for current students detail loop */
+                    
+                    /* if the student is overdue on work */
+                    if($lateCount > 0){
+                        /* Build digest email for lecturer */
+                        $digestData .= "\n Student : " . $index . $summaryData . "\n " . $missedData . "\n";
+                    }        
+                    
+                    /* if the student has a twitter account */
+                    if($row["twitter"] != ""){
+                
+                        /* if the student is overdue on work */
+                        if($lateCount > 0){
+            
+                            /* Build a twitter direct message*/
+                            $options = array("screen_name" => $row["twitter"], 
+                            "text" => "Hi " . $row["firstname"] . ", you have missed " 
+                            . $lateCount . " activities on Moodle in the last two weeks. Please check your email messages.");
+            
+                            /* build an email message to detail the missed work */
+                            $emailData = "Hi " 
+                            . $row["firstname"] 
+                            . ",\nYou seem to have missed some work on Moodle in the last two weeks. "
+                            . "To catch up you need to complete the following:\n" 
+                            . $missedData . "\n";
+                    
+                            /* send email to student */
+                            $mail ? mail($row["email"],"Missed coursework", $emailData, 'From: ' . 'moodle@stephensmith.me.uk' . "\r\n") : print_r($emailData);
+                
+                        }else{
+                
+                            /* Build a twitter direct message congratulating the student on being up-to-date */
+                            $options = array("screen_name" => $row["twitter"], 
+                            "text" => "Hi " . $row["firstname"] . ", you have completed all your activities on Moodle in the last two weeks. well done!");
+                        }
+                    
+                        /* Send twitter direct message */
+                        $twitter ? $connection->post('direct_messages/new', $options): print('Twitter DM to : ' . $options['screen_name'] . " : " . $options['text'] . "\n");
+
+                    } /* end of twitter account if */
+                
+                } /* end of the for each student loop */
     
-    //Send digest email to lecturer.
-    mail('steves2001@gmail.com','Engagement Report', $debugData, 'From: ' . 'noreply@computing-moodle.co.uk' . "\r\n" ); 
-    } // end of the if relating to whether we have any records to track
+                /* send digest email to each lecturer */
+                foreach($lecturerList['lecturers'] as $lecturer_id) {
+                    $mail ? mail($lecturer[$lecturer_id]['email'],'Engagement Report', $digestData, 'From: ' . 'noreply@computing-moodle.co.uk' . "\r\n" ) : print($lecturer[$lecturer_id]['email'] . "\n" . $digestData);
+                }
+            
+            } /* end if the if checking if there are students to be tracked on the course */
+            
+        } /* end of the if relating to whether we have any records to track */
+        
+    } /* end of course loop */
     
-}
+} /*end of the crontab function */
 
 
 
