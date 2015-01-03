@@ -12,7 +12,7 @@ function report_engagement_cron(){
     mtrace( "****************** Hi this is the engagement report ******************");
     $mail = true;               /**< Boolean set to true to enable emailing */
     $twitter = true;            /**< Boolean set to true to enable twitter DM */
-    $restrict = false;          /**< Boolean set to true to restrict script execution to a single attempt a day */
+    $restrict = true;          /**< Boolean set to true to restrict script execution to a single attempt a day */
 
     $tables['lecturer'] = 'report_engagement_lecturers';
     $tables['tracking'] = 'report_engagement';
@@ -150,7 +150,7 @@ function report_engagement_cron(){
                                    $DM_CFG->twit_oauth_token, 
                                    $DM_CFG->twit_oauth_token_secret);
    
-                $digestData = "Student Report\n";
+                $digestData = "Student Report\n\n";
 
                 /* for each student on the course */    
                 foreach($student as $index => $row){
@@ -160,31 +160,28 @@ function report_engagement_cron(){
                     $emailData   = "";/**< String to hold the students email message */
                     $missedData  = "\n" . $courseInfo->fullname . "\n"; /**< String to hold the info on what the student missed */
                     
-                    /* loop through the current students details */
-                    foreach($row as $key => $value){
-                        if($key == "modules"){
-                            /* if this is the modules array for the student loop through identifying missed modules */
-                            foreach($value as $module => $due){
-                                $sectionInfo = $info->get_section_info($info->cms[$module]->sectionnum);
+                    $summaryData .= $row['name'] . ' <' . $row['email'] . '> has not accessed the following on Moodle : ';
                     
-                                $missedData .= "\n     " . $info->cms[$module]->name 
+                    /* loop through identifying missed modules */
+                    foreach($row['modules'] as $module => $due) {
+                        
+                        $sectionInfo = $info->get_section_info($info->cms[$module]->sectionnum);
+                    
+                        $missedData .= "\n     " . $info->cms[$module]->name 
                                 . " in section " . $info->cms[$module]->sectionnum 
                                 . " " . $sectionInfo->name
                                 . " should have been completed by : " 
                                 . date("d-m-y", $due);
-                                $lateCount++;
-                            } /* end of module checking loop */
-                        } else {
-                            /* if it wasn't the module array build the other data as a string*/
-                            $summaryData .= " : " . $key . " : " . $value;
-                        } /* end of the module if */
-            
-                    } /* end of for current students detail loop */
+                    
+                        $lateCount++;
+                            
+                    } /* end of module checking loop */
+
                     
                     /* if the student is overdue on work */
                     if($lateCount > 0){
                         /* Build digest email for lecturer */
-                        $digestData .= "\n Student : " . $index . $summaryData . "\n " . $missedData . "\n";
+                        $digestData .= $summaryData . "\n " . $missedData . "\n";
                     }        
                     
                     /* if the student has a twitter account */
@@ -201,7 +198,7 @@ function report_engagement_cron(){
                             /* build an email message to detail the missed work */
                             $emailData = "Hi " 
                             . $row["firstname"] 
-                            . ",\nYou seem to have missed some work on Moodle in the last two weeks. "
+                            . ",\n\nYou seem to have missed some work on Moodle in the last two weeks. "
                             . "To catch up you need to complete the following:\n" 
                             . $missedData . "\n";
                     
