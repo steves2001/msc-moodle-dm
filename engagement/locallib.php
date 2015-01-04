@@ -30,6 +30,7 @@ class engagement extends moodleform {
     private $info; /**< Array structure containing course information */
     private $courseId; /**< The moodle course id from the database */
     private $trackedModules; /**< Array of trackedModule details */
+    private $lecturerId = false; /**< The lecturer id from the database */
     private $group = 0; // EXTRA CODE TO DECIDE GROUP
     
 /**
@@ -51,7 +52,8 @@ class engagement extends moodleform {
         // Start of the tracking form
         $mform =& $this->_form; // Don't forget the underscore!
       
-      
+        // Allow the lecturer to unsubscribe from the digest email
+        $mform->addElement('advcheckbox', 'LecturerBox', 'Subscribe to the digest report','Emails will be sent to ' . $this->_customdata['email'] ,NULL , array(0, 1));
         
         //  Loop through each section
         foreach ($this->info->sections as $section=>$modules) {
@@ -67,7 +69,7 @@ class engagement extends moodleform {
             // in each section loop through modules and create a form entry row
             foreach($modules as $module) {
                 if(isset($this->info->cms[$module]->url)){
-                    $mform->addElement('date_selector', 'module' . $module, $module . " " . $this->info->cms[$module]->name, $calOptionsTrue);
+                    $mform->addElement('date_selector', 'module' . $module,  $this->info->cms[$module]->name, $calOptionsTrue);
                     $mform->disabledIf('module' . $module, 'TrackSectionBox' . $section, 'checked');
                 } // End if
                 
@@ -191,7 +193,12 @@ class engagement extends moodleform {
         $this->build_tracking_info();     // build the $trackingInfo array data
         
         $mform =& $this->_form;
-        
+        // If the lecturer has an entry in the trackng table
+        if($this->lecturerId){
+            $lecturerCheckBox =& $mform->getElement('LecturerBox');
+            $lecturerCheckBox->setValue(1);
+            
+        }
         // loop through the sections
         foreach($this->trackingInfo as $section=>$sectionDetails){
             
@@ -238,6 +245,9 @@ class engagement extends moodleform {
     public function store_tracking_info(){
         global $DB;
         
+        $formData = array();
+        $formData = (array) $this->get_data();
+        
         // Build lecturer record for emailing each week
         $lecturerRecord = new stdClass();
         $lecturerRecord->timemodified = time();
@@ -247,20 +257,23 @@ class engagement extends moodleform {
         $lecturerRecord->email = $this->_customdata['email'];
         
         //Check to see if there is an existing entry for this lecturer on this course
-        if($lecturerId = $DB->get_field('report_engagement_lecturers', 'id', array ('courseid'=>$lecturerRecord->courseid, 'userid'=>$lecturerRecord->userid))){
-           //If the record exists update it
-           $lecturerRecord->id = $lecturerId;
-           $DB->update_record('report_engagement_lecturers', $lecturerRecord); 
+        if($this->lecturerId){
+           //If the record exists update or delete it based on the form check box
+           
+            $lecturerRecord->id = $this->lecturerId;
+            
+            if($formData['LecturerBox'] == 0){
+                $DB->delete_records('report_engagement_lecturers', array('courseid'=>$lecturerRecord->courseid, 'userid'=>$lecturerRecord->userid));
+            } else {
+                $DB->update_record('report_engagement_lecturers', $lecturerRecord);
+            }
+            
         }else{
            // If the record did not exist create a new record.
            $DB->insert_record('report_engagement_lecturers', $lecturerRecord); 
         }
         
-        //$this->debug_object($lecturerRecord);
 
-        $formData = array();
-        $formData = (array) $this->get_data();
-        //$this->debug_object($formData);
         // For each section in the course
         foreach ($this->info->sections as $section=>$modules) {
 
@@ -388,6 +401,7 @@ class engagement extends moodleform {
         
         $this->trackedModules = $DB->get_records_sql($sql);
         
+        $this->lecturerId = $DB->get_field('report_engagement_lecturers', 'id', array ('courseid'=>$this->courseId, 'userid'=>$this->_customdata['userid']));
         
     } // end of get_tracking_info()
     

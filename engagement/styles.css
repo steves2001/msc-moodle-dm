@@ -6,3 +6,5 @@
 #page-report-engagement-user .section h2 {margin-top: 0;}
 #page-report-engagement-user .section {margin-left: 30px;margin-right: 30px;margin-bottom: 20px;}
 #page-report-engagement-user .section {border-width:1px;border-style:solid;padding:10px;}
+#engagement-report-form .fitemtitle {width: 35%;text-align: left;float: left;}
+#engagement-report-form .felement {width: 60%;}

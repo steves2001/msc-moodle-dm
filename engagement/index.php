@@ -13,12 +13,14 @@ require_capability('report/engagement:view', $context);
 // https://docs.moodle.org/dev/Page_API
 $PAGE->set_url('/report/engagement/index.php', array('id'=>$id));
 $PAGE->set_title(get_string('pluginname', 'report_engagement'));
+$PAGE->set_heading($course->fullname);
 $PAGE->set_pagelayout('report');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'report_engagement'));
-echo $OUTPUT->box_start();
-
+//echo $OUTPUT->box_start();
+//css div tag https://docs.moodle.org/dev/Output_API#container.2C_container_start_and_container_end
+echo $OUTPUT->container_start('formatting', 'engagement-report-form');
 // Do some clever stuff here!!
 $eng = new engagement($PAGE->url, 
                       array('email'=>$USER->email,
@@ -30,7 +32,8 @@ if($eng->is_submitted()){
 //    $eng->store_tracking_info();
 }
 $eng->display();
-echo $OUTPUT->box_end();
+echo $OUTPUT->container_end();
+//echo $OUTPUT->box_end();
 echo $OUTPUT->box($eng->debugData);
 echo $OUTPUT->footer();
 
