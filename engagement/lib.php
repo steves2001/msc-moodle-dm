@@ -3,6 +3,26 @@ defined('MOODLE_INTERNAL') || die;
 require_once('twitteroauth/twitteroauth.php'); // Abraham Williams Twitter REST API 
 
 /**
+ * This function checks a day of the week and an hour against the
+ * system time returning true if they match
+ * 
+ * @param int $dueDay range 0-6 day of the week 0 = Sunday.
+ * @param int $dueHour range 0-23 hour of the day.
+ * 
+ * @return bool true if day and hour match else false.
+ */
+function report_due($dueDay = 0, $dueHour = 3){
+    
+    $currentDay     = date("w"); /**< the systems day of the week 0 = Sunday */
+    $currentHour    = date("G"); /**< the systems hour of the day 0-23 */
+    
+    if($dueDay == $currentDay && $dueHour == $currentHour) 
+        return true;
+
+    return false;
+}
+
+/**
  * This function is called by moodles internal cron script
  * it is used to collect user data and communicate with them
  * 
@@ -22,14 +42,9 @@ function report_engagement_cron(){
     $courseLecturer = array();  /**< Array of courses and lecturer ids */
     
     
-    // Code to limit the script running to a fixed time of day
-    // this needs rewriting to a function
-    $access = date("G") * 60 + date("i");
-    $go = 14 * 60 + 25;
-    $diff = abs($access - $go);
-    // End of the time limit code
-    
-    if ($restrict && $diff > 2) return;
+    // Limit the script running to a fixed time of day
+    if ($restrict && !report_due(0,12)) return;
+
     
     global $DB;
     
