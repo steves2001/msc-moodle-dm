@@ -224,12 +224,14 @@ class engagement extends moodleform {
             foreach($sectionDetails['modules'] as $module=>$moduleDetails ) {
                 
                 $moduleElement =& $mform->getElement('module' . $module);
+                
                 // Update its tracking date and check its enabled box if it's tracked
-                if($moduleDetails['tracked']){
+                
+                if($moduleDetails['tracked'] == 1){
                     $moduleElement->setValue($this->build_date_array($moduleDetails['trackDate'], 1));
                 } else {
-                    $moduleElement->setValue($dateArray);
-                    
+                    //$moduleElement->setValue($dateArray, 0);
+                    //$this->debug_object($moduleDetails['tracked']);
                 } // End tracking if
                 
             } // End module foreach section
@@ -298,6 +300,7 @@ class engagement extends moodleform {
                     
                 } // End section date checking if
                 
+                // If there is a tracking date we need to either update or create a new tracking record
                 if($trackingDate != 0) {
                     
                     if($this->info->cms[$module]->url){
@@ -321,6 +324,12 @@ class engagement extends moodleform {
                             $DB->insert_record('report_engagement', $record);
                             
                         }
+                    }
+                }else{
+                    // If there is no tracking date check whether it was previously tracked and if it is delete the record.    
+                    if($rowId = $this->is_tracked($module)){
+                        $DB->delete_records('report_engagement', array('courseid'=>$this->courseId, 'moduleid'=>$module, 'groupid' => $this->group));
+                        //$this->debug_object($module);
                     }
                 }
                 

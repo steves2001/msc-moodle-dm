@@ -11,7 +11,7 @@ require_once('twitteroauth/twitteroauth.php'); // Abraham Williams Twitter REST 
  * 
  * @return bool true if day and hour match else false.
  */
-function report_due($dueDay = 0, $dueHour = 3){
+function report_due($dueDay = 0, $dueHour = 10){
     
     $currentDay     = date("w"); /**< the systems day of the week 0 = Sunday */
     $currentHour    = date("G"); /**< the systems hour of the day 0-23 */
@@ -100,7 +100,7 @@ function report_engagement_cron(){
         $courseLecturer[$record->courseid]['lecturers'][$courseLecturer[$record->courseid]['count']] = $record->userid;
         $courseLecturer[$record->courseid]['count']++;
     }
-    
+    //print_r($courseLecturer);
     $rs->close();
     /* loop through the courses that are tracked */
     foreach($courseLecturer as $course => $lecturerList){
@@ -112,7 +112,8 @@ function report_engagement_cron(){
         
         /* Get tracked modules */
         $records = $DB->get_records_sql($sql_tracked_modules, array($course));
-    
+        //print("Course " . $course . "\n");
+        //print_r($records);
         /* if there are tracked records */
         if(!empty($records)){
         
@@ -175,7 +176,7 @@ function report_engagement_cron(){
                     $emailData   = "";/**< String to hold the students email message */
                     $missedData  = "\n" . $courseInfo->fullname . "\n"; /**< String to hold the info on what the student missed */
                     
-                    $summaryData .= $row['name'] . ' <' . $row['email'] . '> has not accessed the following on Moodle : ';
+                    $summaryData .= "\n" . $row['name'] . ' <' . $row['email'] . '> has not accessed the following on Moodle : ';
                     
                     /* loop through identifying missed modules */
                     foreach($row['modules'] as $module => $due) {
