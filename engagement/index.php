@@ -34,7 +34,7 @@ if($eng->is_submitted()){
 $eng->display();
 echo $OUTPUT->container_end();
 //echo $OUTPUT->box_end();
-echo $OUTPUT->box($eng->debugData);
+//echo $OUTPUT->box($eng->debugData);
 echo $OUTPUT->footer();
 
 

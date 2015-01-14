@@ -78,7 +78,7 @@ class engagement extends moodleform {
         } // End foreach sections
       
         //Add the standard form buttons
-        $this->add_action_buttons();
+        $this->add_action_buttons($cancel = false, $submitlabel=null);
         // End of the tracking form
         
 
