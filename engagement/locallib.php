@@ -57,9 +57,10 @@ class engagement extends moodleform {
         
         //  Loop through each section
         foreach ($this->info->sections as $section=>$modules) {
-            
+                        
+            $sectionInfo = $this->info->get_section_info($section);
             // https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#Use_Fieldsets_to_group_Form_Elements
-            $mform->addElement('header', 'Section' . $section, 'Section : ' . $section);
+            $mform->addElement('header', 'Section' . $section, 'Section : ' . str_pad($section, 3, '0', STR_PAD_LEFT) . ' : ' . $sectionInfo->name );
             $mform->setExpanded('Section' . $section);
 
             // Display a date selector to allow tracking of one section
